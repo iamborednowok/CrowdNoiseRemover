@@ -10,6 +10,7 @@
       --bg: #080b12; --surface: #0e1320; --surface2: #141926;
       --border: #ffffff10; --border2: #ffffff18;
       --cyan: #3de8ff; --orange: #ff7d45; --green: #4dffb4; --muted: #6b7a99; --text: #c2d0e8;
+      --purple: #b57bff;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { min-height: 100vh; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; padding: 24px 16px 40px; max-width: 520px; margin: 0 auto; }
@@ -19,7 +20,7 @@
     .tagline { font-size: 11px; color: var(--muted); margin-top: 3px; letter-spacing: 1px; }
 
     #drop-zone { border: 1px dashed var(--border2); border-radius: 14px; padding: 30px 16px; text-align: center; cursor: pointer; background: var(--surface); margin-bottom: 14px; transition: border-color 0.2s, background 0.2s; }
-    #drop-zone:hover { border-color: #3de8ff35; background: #0f1726; }
+    #drop-zone:hover, #drop-zone.drag-over { border-color: #3de8ff50; background: #0f1f30; }
     .dz-icon { font-size: 30px; margin-bottom: 8px; }
     .dz-hint { font-size: 13px; color: var(--muted); }
     .dz-formats { font-size: 11px; color: #ffffff20; margin-top: 4px; }
@@ -27,13 +28,11 @@
     .fmeta { font-size: 11px; color: var(--muted); margin-top: 4px; }
     .replace { font-size: 11px; color: #ffffff25; margin-top: 6px; }
 
-    /* Waveform canvas */
     #waveform-wrap { display: none; margin-top: 12px; position: relative; }
     #waveform-canvas { width: 100%; height: 64px; border-radius: 8px; display: block; }
     .wf-label { position: absolute; top: 4px; left: 8px; font-size: 9px; font-family: 'Space Mono', monospace; letter-spacing: 1px; color: #ffffff30; }
     .wf-label-proc { position: absolute; top: 4px; right: 8px; font-size: 9px; font-family: 'Space Mono', monospace; letter-spacing: 1px; color: #ff7d4540; }
 
-    /* Noise reduction badge */
     #nr-badge { display: none; margin-top: 8px; background: #4dffb40a; border: 1px solid #4dffb425; border-radius: 8px; padding: 7px 12px; }
     .nr-row { display: flex; justify-content: space-between; align-items: center; }
     .nr-label { font-size: 10px; color: var(--muted); font-family: 'Space Mono', monospace; letter-spacing: 1px; }
@@ -76,9 +75,8 @@
     .slider-val { font-size: 12px; color: var(--cyan); font-family: 'Space Mono', monospace; font-weight: 700; }
     input[type=range] { width: 100%; accent-color: var(--cyan); cursor: pointer; }
 
-    /* Artifact warning strip */
     #artifact-hint { display: none; background: #1a100a; border: 1px solid #ff7d4525; border-radius: 9px; padding: 8px 12px; font-size: 11px; color: #ff7d4590; margin-top: 10px; line-height: 1.5; }
-    #artifact-hint b { color: #ff7d45; font-weight: 600; }
+    #artifact-hint b { color: #ff7d45; }
 
     .btn { width: 100%; padding: 13px; border-radius: 11px; border: 1px solid var(--border2); background: transparent; color: var(--muted); font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; margin-bottom: 10px; transition: all 0.15s; font-weight: 500; }
     .btn:hover { background: #ffffff06; }
@@ -93,25 +91,20 @@
     .progress-wrap { height: 2px; background: #0e1825; border-radius: 2px; margin-bottom: 14px; overflow: hidden; display: none; }
     .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--cyan), #0070ff); transition: width 0.2s; }
 
-    /* AI Advisor */
     #card-ai { display: none; }
     .ai-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
     .ai-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); animation: pulse 2s infinite; }
     @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
     .ai-title { font-family: 'Space Mono', monospace; font-size: 10px; color: #ffffff30; letter-spacing: 1.5px; }
-
     .ai-selects { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
     .ai-select { background: var(--surface2); border: 1px solid var(--border2); border-radius: 9px; padding: 9px 10px; color: var(--text); font-size: 12px; font-family: 'DM Sans', sans-serif; outline: none; cursor: pointer; -webkit-appearance: none; width: 100%; }
     .ai-select:focus { border-color: #3de8ff30; }
     .ai-select option { background: #141926; }
-
     .ai-describe { width: 100%; background: var(--surface2); border: 1px solid var(--border2); border-radius: 10px; padding: 10px 12px; color: var(--text); font-size: 12px; font-family: 'DM Sans', sans-serif; resize: none; outline: none; transition: border-color 0.2s; line-height: 1.5; margin-bottom: 10px; }
     .ai-describe:focus { border-color: #3de8ff30; }
     .ai-describe::placeholder { color: #ffffff25; }
-
     .ai-ask-btn { width: 100%; padding: 10px; border-radius: 9px; border: 1px solid #3de8ff25; background: #3de8ff08; color: var(--cyan); font-size: 12px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 600; transition: all 0.15s; }
     .ai-ask-btn:hover { background: #3de8ff14; }
-
     .ai-response { margin-top: 12px; display: none; background: var(--surface2); border-radius: 10px; border: 1px solid var(--border); padding: 14px; }
     .ai-block { margin-bottom: 12px; }
     .ai-block:last-child { margin-bottom: 0; }
@@ -121,10 +114,26 @@
     .head-keep  { color: var(--green); }
     .head-rec   { color: var(--cyan); }
     .head-warn  { color: #ffb347; }
-
     .setting-chip { display: inline-block; background: #3de8ff14; border: 1px solid #3de8ff30; color: var(--cyan); border-radius: 6px; padding: 2px 8px; font-size: 11px; font-family: 'Space Mono', monospace; margin: 2px 3px 2px 0; cursor: pointer; }
     .setting-chip:hover { background: #3de8ff22; }
     .chip-applied { background: #4dffb414 !important; border-color: #4dffb440 !important; color: var(--green) !important; cursor: default !important; }
+
+    /* Free AI Tools */
+    #card-free-ai { display: block; border-color: #b57bff18; }
+    .free-ai-intro { font-size: 11px; color: var(--muted); margin-bottom: 14px; line-height: 1.55; }
+    .free-ai-intro b { color: var(--text); }
+    .tool-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border-radius: 10px; margin-bottom: 6px; background: var(--surface2); border: 1px solid var(--border); text-decoration: none; transition: border-color 0.15s; }
+    .tool-item:hover { border-color: #b57bff35; }
+    .tool-item:last-child { margin-bottom: 0; }
+    .tool-badge { font-size: 9px; font-family: 'Space Mono', monospace; padding: 2px 6px; border-radius: 4px; flex-shrink: 0; margin-top: 2px; white-space: nowrap; }
+    .badge-web { background: #3de8ff12; color: var(--cyan); border: 1px solid #3de8ff25; }
+    .badge-app { background: #ff7d4512; color: var(--orange); border: 1px solid #ff7d4525; }
+    .badge-oss { background: #4dffb412; color: var(--green); border: 1px solid #4dffb425; }
+    .tool-info { flex: 1; min-width: 0; }
+    .tool-name { font-size: 13px; color: var(--text); font-weight: 600; }
+    .tool-desc { font-size: 11px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+    .tool-limit { font-size: 10px; color: #ffffff28; margin-top: 3px; }
+    .tool-arrow { font-size: 12px; color: #ffffff22; flex-shrink: 0; margin-top: 2px; }
 
     .footer { font-size: 11px; color: #ffffff12; text-align: center; margin-top: 20px; }
   </style>
@@ -140,7 +149,7 @@
   <input id="file-input" type="file" accept="audio/*" style="display:none"/>
   <div id="dz-empty">
     <div class="dz-icon">🎵</div>
-    <div class="dz-hint">Tap to choose audio file</div>
+    <div class="dz-hint">Tap or drop an audio file</div>
     <div class="dz-formats">MP3 · WAV · OGG · M4A · FLAC</div>
   </div>
   <div id="dz-loaded" style="display:none">
@@ -168,7 +177,7 @@
   <div class="card-label">FILTER PROFILE</div>
   <div class="profile-item active" data-p="standard">
     <span class="p-emoji">⚙️</span>
-    <div><div class="p-name">Standard</div><div class="p-desc">Balanced subtraction across all frequencies</div></div>
+    <div><div class="p-name">Standard</div><div class="p-desc">Balanced Wiener filtering across all frequencies</div></div>
   </div>
   <div class="profile-item" data-p="music">
     <span class="p-emoji">🎵</span>
@@ -176,7 +185,7 @@
   </div>
   <div class="profile-item" data-p="live">
     <span class="p-emoji">🎤</span>
-    <div><div class="p-name">Live Venue</div><div class="p-desc">Aggressive mid-range cleaning for concert/event audio</div></div>
+    <div><div class="p-name">Live Venue</div><div class="p-desc">Adaptive mid-range cleaning for concert/event audio</div></div>
   </div>
   <div class="profile-item" data-p="speech">
     <span class="p-emoji">🗣️</span>
@@ -205,7 +214,7 @@
     <input type="range" id="sensitivity" min="0.5" max="4.0" step="0.1" value="1.5"/>
   </div>
   <div id="artifact-hint">
-    <b>Tip:</b> If the result sounds underwater or metallic, lower Sensitivity or Strength, or switch to <b>Standard</b> profile.
+    <b>Tip:</b> High settings may cause metallic artefacts. Try lowering Sensitivity or switching to <b>Standard</b>.
   </div>
 </div>
 
@@ -246,12 +255,55 @@
 <button class="btn" id="play-proc-btn">▶ Play Cleaned</button>
 <button class="btn" id="download-btn">↓ Download WAV</button>
 
+<div class="card" id="card-free-ai">
+  <div class="card-label">FREE AI NOISE REMOVERS</div>
+  <div class="free-ai-intro">
+    For <b>loud crowds, screaming, or heavily noise-dominated recordings</b>, browser DSP has fundamental limits.
+    These free neural-network tools use deep learning and will get far better results.
+  </div>
+  <a class="tool-item" href="https://podcast.adobe.com/enhance" target="_blank" rel="noopener">
+    <span class="tool-badge badge-web">WEB</span>
+    <div class="tool-info">
+      <div class="tool-name">Adobe Podcast Enhance</div>
+      <div class="tool-desc">Best-in-class AI voice cleaning. Removes crowds, reverb, and room noise. Studio quality for speech.</div>
+      <div class="tool-limit">Free · Speech only · Up to 1 hr per file</div>
+    </div>
+    <span class="tool-arrow">↗</span>
+  </a>
+  <a class="tool-item" href="https://ultimatevocalremover.com" target="_blank" rel="noopener">
+    <span class="tool-badge badge-app">APP</span>
+    <div class="tool-info">
+      <div class="tool-name">Ultimate Vocal Remover</div>
+      <div class="tool-desc">Free desktop app with multiple AI models (MDX-Net, VR Arch, Demucs). Best for concerts — isolate instruments or voice from crowd.</div>
+      <div class="tool-limit">Free · Windows &amp; Mac · Offline · Music &amp; voice</div>
+    </div>
+    <span class="tool-arrow">↗</span>
+  </a>
+  <a class="tool-item" href="https://github.com/facebookresearch/demucs" target="_blank" rel="noopener">
+    <span class="tool-badge badge-oss">OSS</span>
+    <div class="tool-info">
+      <div class="tool-name">Demucs (Meta AI)</div>
+      <div class="tool-desc">Neural source separation. Splits audio into vocals, drums, bass, other — keep what you want and discard the rest.</div>
+      <div class="tool-limit">Free · Python · Works on music &amp; concerts</div>
+    </div>
+    <span class="tool-arrow">↗</span>
+  </a>
+  <a class="tool-item" href="https://github.com/rikorose/DeepFilterNet" target="_blank" rel="noopener">
+    <span class="tool-badge badge-oss">OSS</span>
+    <div class="tool-info">
+      <div class="tool-name">DeepFilterNet</div>
+      <div class="tool-desc">State-of-the-art real-time speech enhancement. Handles very noisy recordings that simple subtraction can't touch.</div>
+      <div class="tool-limit">Free · Python / Rust · Speech-focused</div>
+    </div>
+    <span class="tool-arrow">↗</span>
+  </a>
+</div>
+
 <div class="footer">All DSP runs locally — your audio never leaves this page</div>
 
 <script>
 var origBuf=null,procBuf=null,audioCtx=null,currentSrc=null,profile='standard',playing=null;
 
-// ── Frequency visualisation map ───────────────────────────────────────────────
 var FREQ_PROFILES={
   standard:[
     {label:'Sub (0–80 Hz)',    pct:15,type:'partial'},
@@ -280,13 +332,12 @@ var FREQ_PROFILES={
   speech:[
     {label:'Sub (0–80 Hz)',    pct:5, type:'protect'},
     {label:'Bass (80–250)',    pct:8, type:'protect'},
-    {label:'Low-mid (250–1k)',pct:35, type:'partial'},
-    {label:'Mid (1k–4k)',      pct:60, type:'clean'},
-    {label:'Presence (4–6k)', pct:50, type:'partial'},
-    {label:'Air (6k+)',        pct:18, type:'protect'},
+    {label:'Low-mid (250–1k)',pct:35,type:'partial'},
+    {label:'Mid (1k–4k)',      pct:60,type:'clean'},
+    {label:'Presence (4–6k)', pct:50,type:'partial'},
+    {label:'Air (6k+)',        pct:18,type:'protect'},
   ]
 };
-
 function renderFreqMap(p){
   var rows=FREQ_PROFILES[p]||FREQ_PROFILES.standard;
   document.getElementById('freq-rows').innerHTML=rows.map(function(r){
@@ -300,46 +351,28 @@ function renderFreqMap(p){
   document.getElementById('freq-map').style.display='block';
 }
 
-// ── Waveform visualiser ───────────────────────────────────────────────────────
-function drawWaveform(buf, showProc){
+function drawWaveform(showProc){
   var canvas=document.getElementById('waveform-canvas');
   var dpr=window.devicePixelRatio||1;
-  var W=canvas.offsetWidth||canvas.parentElement.offsetWidth||300;
-  canvas.width=W*dpr; canvas.height=128*dpr;
-  canvas.style.height='64px';
-  var ctx2=canvas.getContext('2d');
-  ctx2.scale(dpr,dpr);
-  var H=64;
-  ctx2.clearRect(0,0,W,H);
-
-  function drawChannel(audioBuf, color, alpha){
-    var data=audioBuf.getChannelData(0);
-    var step=Math.ceil(data.length/W);
-    ctx2.beginPath();
-    ctx2.strokeStyle=color;
-    ctx2.globalAlpha=alpha;
-    ctx2.lineWidth=1;
+  var W=canvas.offsetWidth||300;
+  canvas.width=W*dpr;canvas.height=128*dpr;canvas.style.height='64px';
+  var c=canvas.getContext('2d');c.scale(dpr,dpr);
+  var H=64;c.clearRect(0,0,W,H);
+  function drawCh(buf,color,alpha){
+    var d=buf.getChannelData(0),step=Math.ceil(d.length/W);
+    c.beginPath();c.strokeStyle=color;c.globalAlpha=alpha;c.lineWidth=1;
     for(var x=0;x<W;x++){
-      var start=x*step, end=Math.min(start+step,data.length);
-      var mn=0,mx=0;
-      for(var i=start;i<end;i++){if(data[i]<mn)mn=data[i];if(data[i]>mx)mx=data[i];}
-      var y1=H/2-(mx*(H/2-4));
-      var y2=H/2-(mn*(H/2-4));
-      if(x===0)ctx2.moveTo(x,y1);
-      ctx2.lineTo(x,y1);
-      ctx2.lineTo(x,y2);
+      var s=x*step,e2=Math.min(s+step,d.length),mn=0,mx=0;
+      for(var i=s;i<e2;i++){if(d[i]<mn)mn=d[i];if(d[i]>mx)mx=d[i];}
+      var y1=H/2-mx*(H/2-4),y2=H/2-mn*(H/2-4);
+      if(x===0)c.moveTo(x,y1);c.lineTo(x,y1);c.lineTo(x,y2);
     }
-    ctx2.stroke();
-    ctx2.globalAlpha=1;
+    c.stroke();c.globalAlpha=1;
   }
-
-  drawChannel(buf, '#3de8ff', showProc ? 0.25 : 0.7);
-  if(showProc && procBuf){
-    drawChannel(procBuf, '#ff7d45', 0.85);
-  }
+  drawCh(origBuf,'#3de8ff',showProc?0.22:0.7);
+  if(showProc&&procBuf)drawCh(procBuf,'#ff7d45',0.85);
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
 function getCtx(){if(!audioCtx||audioCtx.state==='closed')audioCtx=new AudioContext();return audioCtx;}
 function fmt(s){return Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');}
 function setProgress(p){document.getElementById('progress-bar').style.width=p+'%';}
@@ -352,12 +385,15 @@ function stopPlay(){
   o.classList.remove('active');p.classList.remove('active');
   o.textContent='▶ Play Original';p.textContent='▶ Play Cleaned';
 }
-
-// Compute RMS of a buffer channel for noise reduction metric
-function bufferRMS(buf){
-  var d=buf.getChannelData(0),sum=0;
-  for(var i=0;i<d.length;i++)sum+=d[i]*d[i];
-  return Math.sqrt(sum/d.length);
+function bufRMS(buf){
+  var d=buf.getChannelData(0),s=0;
+  for(var i=0;i<d.length;i++)s+=d[i]*d[i];
+  return Math.sqrt(s/d.length);
+}
+function updateArtifactHint(){
+  var s=parseFloat(document.getElementById('sensitivity').value);
+  var t=parseFloat(document.getElementById('strength').value);
+  document.getElementById('artifact-hint').style.display=(s>=2.5||t>=0.85)?'block':'none';
 }
 
 // ── FFT ───────────────────────────────────────────────────────────────────────
@@ -372,9 +408,9 @@ function fft(re,im){
     for(var i=0;i<N;i+=len){
       var uRe=1,uIm=0;
       for(var k=0;k<len>>1;k++){
-        var e=i+k,o=i+k+(len>>1);
-        var tRe=uRe*re[o]-uIm*im[o],tIm=uRe*im[o]+uIm*re[o];
-        re[o]=re[e]-tRe;im[o]=im[e]-tIm;re[e]+=tRe;im[e]+=tIm;
+        var e=i+k,oo=i+k+(len>>1);
+        var tRe=uRe*re[oo]-uIm*im[oo],tIm=uRe*im[oo]+uIm*re[oo];
+        re[oo]=re[e]-tRe;im[oo]=im[e]-tIm;re[e]+=tRe;im[e]+=tIm;
         var nu=uRe*wRe-uIm*wIm;uIm=uRe*wIm+uIm*wRe;uRe=nu;
       }
     }
@@ -392,78 +428,117 @@ function hann(N){
   return w;
 }
 
-// ── CORE DSP — Energy-based noise floor estimation ────────────────────────────
+// ── CORE DSP v3: Min-Statistics + MMSE Wiener + Transient Protection ──────────
 //
-//  FIX FOR UNDERWATER / MUSICAL NOISE ARTEFACTS:
-//  1. Spectral floor (fl) raised to ≥0.12 — prevents near-zero bins that cause
-//     warbling / phasing artefacts.
-//  2. Per-bin gain is computed first, then smoothed with a moving average across
-//     neighbouring bins (radius 3). This eliminates abrupt gain jumps between
-//     adjacent bins — the primary cause of the "underwater" sound.
-//  3. Noise estimation smoothing multiplier reduced: 1.5→1.2 (live), 1.1→1.0
-//     (standard/music) — less over-subtraction.
-//  4. Noise floor smoothing radius widened: 6→10, 9→14 — more stable estimate.
+//  ROOT CAUSE OF PREVIOUS FAILURES:
+//  ─────────────────────────────────
+//  The old "bottom 20% energy frames" approach picks quiet frames for the noise
+//  reference. When the crowd is LOUD AND CONSTANT there are no quiet frames.
+//  The fallback averages all frames → noise estimate ≈ actual signal → massive
+//  over-subtraction on quieter moments → underwater warble. Loud frames (screams)
+//  get incorrectly labelled as "signal" and are left in.
+//
+//  NEW TECHNIQUE 1 — MIN-STATISTICS PER BIN:
+//  ─────────────────────────────────────────
+//  Instead of comparing whole-frame energy, look at each frequency bin separately.
+//  Slide a window of HIST frames across the file; for every window, record the
+//  minimum magnitude at each bin. Average those per-bin minimums across all windows.
+//  This finds the quietest moment each frequency bin ever had — which is the noise
+//  floor at that frequency — even if the overall recording is always loud.
+//  Multiply by BIAS (≈1.66) to correct the statistical downward bias of taking a min.
+//
+//  NEW TECHNIQUE 2 — MMSE WIENER GAIN:
+//  ─────────────────────────────────────
+//  Old: output_mag = max(input_mag - noise_mag, floor * input_mag)
+//       → hard cliff → spectral holes → warble
+//  New: SNR[k]     = max(0, input_mag[k] / noise_mag[k] - 1)
+//       gain[k]    = SNR[k] / (SNR[k] + 1)          ← smooth curve, never zero
+//  When signal = noise  → gain = 0  (but floor lifts it)
+//  When signal >> noise → gain → 1  (signal passes through cleanly)
+//  No spectral holes. No underwater sound.
+//
+//  NEW TECHNIQUE 3 — TRANSIENT / PEAK PROTECTION:
+//  ────────────────────────────────────────────────
+//  For each output frame, compute frame RMS vs noise floor RMS.
+//  When frame is much louder than noise (screams, music peaks), scale back the
+//  subtraction strength proportionally. This lets signal-dominant moments through
+//  rather than mangling them.
+//  tScale = clamp(noiseFloorRMS / frameRMS, 0.12, 1.0)
+//  → When frame is 8× the noise floor, only 12% of reduction is applied.
+//
+//  NEW TECHNIQUE 4 — 75% OVERLAP (hop = N/4):
+//  ────────────────────────────────────────────
+//  Previous hop was N/2 (50% overlap = 2 frames per window).
+//  N/4 hop gives 75% overlap = 4 frames per window → much smoother
+//  overlap-add reconstruction → fewer inter-frame artefacts.
+//
+//  NEW TECHNIQUE 5 — GAIN SMOOTHING (±4 bins):
+//  ─────────────────────────────────────────────
+//  After computing Wiener gains, apply a moving average over ±4 neighbouring bins.
+//  Isolated high-attenuation bins create spectral spikes in the reconstructed signal.
+//  Smoothing ensures attenuation varies gradually → no spikes → no warble.
 //
 function processChannel(samples,strength,sensitivity,prof,sampleRate,onProgress){
   return new Promise(function(resolve){
-    var N=2048,hop=N>>1,halfN=N>>1;
+    var N=2048,hop=N>>2,halfN=N>>1; // 75% overlap
     var win=hann(N),len=samples.length;
     if(len<N){resolve(samples.slice());return;}
     var totalFrames=Math.max(1,Math.floor((len-N)/hop)+1);
     var binHz=function(k){return k*(sampleRate||44100)/N;};
 
-    // Pass 1: collect per-frame energy + magnitude spectra
-    var frameEnergy=[],frameMags=[];
-    var pos=0,fi=0;
-
+    // Pass 1: collect per-frame per-bin magnitudes
+    var frameMags=[],pos=0,fi=0;
     function collectFrames(){
       if(pos+N>len){estimateNoise();return;}
       var re=new Float32Array(N),im=new Float32Array(N);
-      var rms=0;
-      for(var i=0;i<N;i++){re[i]=samples[pos+i]*win[i];rms+=re[i]*re[i];}
-      rms=Math.sqrt(rms/N);
+      for(var i=0;i<N;i++)re[i]=samples[pos+i]*win[i];
       fft(re,im);
       var m=new Float32Array(halfN);
       for(var k=0;k<halfN;k++)m[k]=Math.hypot(re[k],im[k]);
-      frameEnergy.push(rms);
       frameMags.push(m);
       pos+=hop;fi++;
-      if(fi%80===0){onProgress(fi/totalFrames*0.40);setTimeout(collectFrames,0);}
+      if(fi%80===0){onProgress(fi/totalFrames*0.35);setTimeout(collectFrames,0);}
       else collectFrames();
     }
 
-    var noiseEst=new Float32Array(halfN);
+    var noiseFloor=new Float32Array(halfN);
 
+    // Min-statistics: sliding window minimum per bin, averaged across windows
     function estimateNoise(){
-      var sorted=frameEnergy.slice().sort(function(a,b){return a-b;});
-      var cutoff=sorted[Math.max(9,Math.floor(sorted.length*0.20))];
-      var count=0;
-      for(var f=0;f<frameMags.length;f++){
-        if(frameEnergy[f]<=cutoff){
-          for(var k=0;k<halfN;k++)noiseEst[k]+=frameMags[f][k];
-          count++;
-        }
+      var F=frameMags.length;
+      var HIST=Math.max(10,Math.round(F*0.08)); // ~8% of file per window
+      var BIAS=1.66;  // corrects for min being statistically lower than true noise floor
+      var minSum=new Float32Array(halfN),wc=0;
+      var step=Math.max(1,Math.floor(HIST/2));
+      for(var start=0;start<F;start+=step){
+        var end=Math.min(start+HIST,F);
+        var wMin=new Float32Array(halfN);
+        for(var k=0;k<halfN;k++)wMin[k]=1e18;
+        for(var f=start;f<end;f++)
+          for(var k=0;k<halfN;k++)
+            if(frameMags[f][k]<wMin[k])wMin[k]=frameMags[f][k];
+        for(var k=0;k<halfN;k++)minSum[k]+=wMin[k];
+        wc++;
       }
-      if(count===0){
-        for(var f=0;f<frameMags.length;f++)
-          for(var k=0;k<halfN;k++)noiseEst[k]+=frameMags[f][k];
-        count=frameMags.length;
-      }
-      for(var k=0;k<halfN;k++)noiseEst[k]/=count;
-      frameMags=null;
-      smoothAndSubtract();
+      for(var k=0;k<halfN;k++)
+        noiseFloor[k]=BIAS*(wc>0?minSum[k]/wc:0);
+      frameMags=null; // free memory
+      applyWiener();
     }
 
-    function smoothAndSubtract(){
-      // Wider R + lower multiplier → less over-subtraction → less warbling
-      var R = prof==='live' ? 14 : (prof==='speech' ? 8 : 10);
-      var noiseScale = prof==='live' ? 1.2 : (prof==='speech' ? 1.0 : 1.0);
+    function applyWiener(){
+      // Smooth noise floor across neighbouring bins
+      var R=prof==='live'?14:(prof==='speech'?8:10);
       var smoothed=new Float32Array(halfN);
       for(var k=0;k<halfN;k++){
         var s=0,c=0;
-        for(var j=Math.max(0,k-R);j<=Math.min(halfN-1,k+R);j++){s+=noiseEst[j];c++;}
-        smoothed[k]=noiseScale*s/c;
+        for(var j=Math.max(0,k-R);j<=Math.min(halfN-1,k+R);j++){s+=noiseFloor[j];c++;}
+        smoothed[k]=s/c;
       }
+      // Compute noise floor RMS for transient scaling
+      var nfRMS2=0;
+      for(var k=1;k<halfN;k++)nfRMS2+=smoothed[k]*smoothed[k];
+      var nfRMS=Math.sqrt(nfRMS2/(halfN-1));
 
       var output=new Float32Array(len+N),norm=new Float32Array(len+N);
       var pos2=0,fi2=0;
@@ -471,72 +546,72 @@ function processChannel(samples,strength,sensitivity,prof,sampleRate,onProgress)
       function pass2(){
         if(pos2+N>len){
           var result=new Float32Array(len);
-          for(var i=0;i<len;i++)result[i]=norm[i]>1e-9?output[i]/norm[i]:0;
+          for(var i=0;i<len;i++){
+            var s=norm[i]>1e-9?output[i]/norm[i]:0;
+            result[i]=Math.max(-0.99,Math.min(0.99,s));
+          }
           resolve(result);return;
         }
         var re=new Float32Array(N),im=new Float32Array(N);
-        for(var i=0;i<N;i++)re[i]=samples[pos2+i]*win[i];
+        var fRMS2=0;
+        for(var i=0;i<N;i++){re[i]=samples[pos2+i]*win[i];fRMS2+=re[i]*re[i];}
+        var fRMS=Math.sqrt(fRMS2/N);
         fft(re,im);
 
-        // ── Step 1: compute raw gain per bin ──────────────────────────────
-        var gains  = new Float32Array(halfN);
-        var mags   = new Float32Array(halfN);
-        var phases = new Float32Array(halfN);
+        // Transient protection: back off when signal is loud relative to noise floor
+        var tScale=nfRMS>1e-9?Math.min(1.0,Math.max(0.12,nfRMS/fRMS)):1.0;
 
+        var gains=new Float32Array(halfN),mags=new Float32Array(halfN),phases=new Float32Array(halfN);
         for(var k=1;k<halfN;k++){
           var mag=Math.hypot(re[k],im[k]);
-          mags[k]=mag; phases[k]=Math.atan2(im[k],re[k]);
-          var hz=binHz(k);
-          var sc=strength, fl=0.12; // ← raised floor (was 0.005) — key underwater fix
+          mags[k]=mag;phases[k]=Math.atan2(im[k],re[k]);
+          var hz=binHz(k),sc=strength*tScale,fl=0.15;
 
           if(prof==='music'){
-            if(hz<200)     {sc*=0.10; fl=0.55;}
-            else if(hz<900){sc*=0.30; fl=0.30;}
-            else if(hz<3500){sc*=0.70;fl=0.10;}
-            else if(hz<8000){sc*=1.80;fl=0.08;}
-            else            {sc*=1.50;fl=0.08;}
+            if(hz<200)      {sc*=0.08;fl=0.60;}
+            else if(hz<900) {sc*=0.25;fl=0.32;}
+            else if(hz<3500){sc*=0.65;fl=0.12;}
+            else if(hz<8000){sc*=1.70;fl=0.10;}
+            else            {sc*=1.40;fl=0.10;}
           } else if(prof==='live'){
-            if(hz<120)      {sc*=0.20; fl=0.42;}
-            else if(hz<400) {sc*=0.55; fl=0.22;}
-            else if(hz<800) {sc*=0.90; fl=0.14;}
-            else if(hz<3500){sc*=1.30; fl=0.08;}
-            else if(hz<8000){sc*=2.00; fl=0.08;}
-            else            {sc*=1.60; fl=0.08;}
+            if(hz<120)      {sc*=0.18;fl=0.45;}
+            else if(hz<400) {sc*=0.50;fl=0.25;}
+            else if(hz<800) {sc*=0.85;fl=0.16;}
+            else if(hz<3500){sc*=1.25;fl=0.10;}
+            else if(hz<8000){sc*=1.90;fl=0.10;}
+            else            {sc*=1.50;fl=0.10;}
           } else if(prof==='speech'){
-            if(hz<120)      {sc*=0.08; fl=0.60;}
-            else if(hz<300) {sc*=0.18; fl=0.42;}
-            else if(hz<3500){sc*=1.00; fl=0.10;}
-            else if(hz<6000){sc*=0.80; fl=0.14;}
-            else            {sc*=0.40; fl=0.20;}
-          } else { // standard
-            if(hz<80)   {sc*=0.15; fl=0.30;}
-            else if(hz<250){sc*=0.40;fl=0.18;}
-            else        {sc*=1.00; fl=0.12;}
+            if(hz<120)      {sc*=0.06;fl=0.65;}
+            else if(hz<300) {sc*=0.15;fl=0.45;}
+            else if(hz<3500){sc*=0.95;fl=0.12;}
+            else if(hz<6000){sc*=0.75;fl=0.16;}
+            else            {sc*=0.35;fl=0.22;}
+          } else {
+            if(hz<80)       {sc*=0.12;fl=0.32;}
+            else if(hz<250) {sc*=0.38;fl=0.20;}
+            else            {sc*=1.00;fl=0.14;}
           }
 
-          var nm=Math.max(mag - sensitivity*smoothed[k]*sc, fl*mag);
-          gains[k] = mag>1e-9 ? nm/mag : 1.0;
+          // MMSE Wiener gain — smooth curve, never creates a spectral hole
+          var noiseEst=sensitivity*smoothed[k]*sc;
+          var snr=mag>1e-9?Math.max(0.0,mag/(noiseEst+1e-12)-1.0):0.0;
+          gains[k]=Math.max(snr/(snr+1.0),fl);
         }
 
-        // ── Step 2: smooth gains across neighbouring bins ─────────────────
-        //    This is the primary fix for musical noise / underwater artefacts.
-        //    A moving average over ±GR bins ensures attenuation varies smoothly
-        //    in frequency, preventing the isolated spectral "holes" that cause
-        //    warbling and phasing.
-        var GR=3;
+        // Smooth gains ±4 bins to eliminate spectral spikes
+        var GR=4;
         for(var k=1;k<halfN;k++){
           var gs=0,gc=0;
           for(var j=Math.max(1,k-GR);j<=Math.min(halfN-1,k+GR);j++){gs+=gains[j];gc++;}
-          var g=gs/gc;
-          var nm2=mags[k]*g;
-          re[k]  =nm2*Math.cos( phases[k]); im[k]  =nm2*Math.sin( phases[k]);
-          re[N-k]=nm2*Math.cos(-phases[k]); im[N-k]=nm2*Math.sin(-phases[k]);
+          var g=gs/gc,nm=mags[k]*g;
+          re[k]  =nm*Math.cos( phases[k]);im[k]  =nm*Math.sin( phases[k]);
+          re[N-k]=nm*Math.cos(-phases[k]);im[N-k]=nm*Math.sin(-phases[k]);
         }
 
         ifft(re,im);
         for(var i=0;i<N;i++){output[pos2+i]+=re[i]*win[i];norm[pos2+i]+=win[i]*win[i];}
         pos2+=hop;fi2++;
-        if(fi2%80===0){onProgress(0.40+fi2/totalFrames*0.60);setTimeout(pass2,0);}
+        if(fi2%80===0){onProgress(0.35+fi2/totalFrames*0.65);setTimeout(pass2,0);}
         else pass2();
       }
       pass2();
@@ -563,72 +638,67 @@ function encodeWAV(buf){
   return ab;
 }
 
-// ── Rule-based AI Advisor ─────────────────────────────────────────────────────
+// ── AI Advisor ────────────────────────────────────────────────────────────────
 var ADVICE={
   concert:{
-    crowd:{clean:'Crowd chatter and murmur in the 500 Hz–4 kHz range, plus sustained ambient roar between peaks.',keep:'Bass guitar, kick drum sub-lows (80–300 Hz) and lead vocals. The Live profile shields sub-bass so drums stay punchy.',s:90,x:2.5,p:'live',warn:'Reverb tails may get cut short. If the venue sound is part of the vibe, drop Sensitivity to 2.0 after a first pass.'},
-    chanting:{clean:'Repetitive chant fundamentals (200–800 Hz) and harmonics up to 3 kHz, especially in between-song gaps.',keep:'Melodic instruments and lead vocals, which have more dynamic variation than steady chanting.',s:95,x:3.0,p:'live',warn:'If chanting overlaps with music, expect some bleed — chanting and instruments share similar frequency ranges.'},
-    applause:{clean:'Broadband applause noise (600 Hz–10 kHz, similar to high-frequency white noise).',keep:'Low-frequency instrument body and vocals. Applause is mostly high-frequency so bass is unaffected.',s:85,x:2.5,p:'live',warn:'Applause louder than the music signal is hard to remove cleanly. Lower Strength to 75% if you hear metallic echoes.'},
-    def:{clean:'Mid and high-frequency ambient crowd noise (300 Hz–8 kHz).',keep:'Bass frequencies below 200 Hz and transient peaks above the noise floor.',s:85,x:2.2,p:'live',warn:'Listen for a metallic warble — if you hear it, reduce Sensitivity by 0.5.'}
+    crowd:{clean:'Crowd chatter in the 500 Hz–4 kHz range plus ambient roar between peaks.',keep:'Bass guitar, kick drum sub-lows and lead vocals. Live profile shields sub-bass.',s:85,x:2.0,p:'live',warn:'For very loud concerts, Demucs or UVR (in Free AI Tools below) will give far better results.'},
+    chanting:{clean:'Chant fundamentals (200–800 Hz) and harmonics up to 3 kHz.',keep:'Melodic instruments and lead vocals which have more dynamic variation.',s:88,x:2.3,p:'live',warn:'If chanting overlaps with music, expect bleed. Transient protection helps preserve peaks.'},
+    applause:{clean:'Broadband applause (600 Hz–10 kHz, like high-freq white noise).',keep:'Low-frequency instrument body and vocals.',s:80,x:2.0,p:'live',warn:'Applause as loud as the music is hard to remove cleanly. The Wiener filter softens it.'},
+    def:{clean:'Mid and high-frequency crowd noise (300 Hz–8 kHz).',keep:'Bass below 200 Hz and transient peaks.',s:80,x:2.0,p:'live',warn:'If unsatisfactory, try Adobe Podcast Enhance or Demucs from Free AI Tools.'}
   },
   speech:{
-    crowd:{clean:'Background chatter energy in the 250 Hz–3.5 kHz speech band, especially during pauses in the main speaker.',keep:'Primary speaker voice fundamentals (100–300 Hz) and formants (800 Hz–3 kHz).',s:75,x:1.8,p:'speech',warn:'Aggressive reduction can make speech sound hollow. If the voice sounds thin, reduce Strength to 65%.'},
-    ambient:{clean:'Steady-state ambient room hum and HVAC-type broadband noise under the speech signal.',keep:'Speech intelligibility and vocal warmth. Steady noise is the best case for spectral subtraction.',s:70,x:1.6,p:'speech',warn:'Lip smacks and breath sounds may also be reduced — that is usually fine for voice recordings.'},
-    def:{clean:'Background noise in the speech frequency range (250 Hz–4 kHz).',keep:'Vocal clarity and presence.',s:75,x:1.8,p:'speech',warn:'Check the cleaned version carefully in the 1–3 kHz range where speech intelligibility lives.'}
+    crowd:{clean:'Background chatter in the 250 Hz–3.5 kHz speech band during pauses.',keep:'Primary speaker fundamentals (100–300 Hz) and formants (800 Hz–3 kHz).',s:75,x:1.8,p:'speech',warn:'Aggressive reduction can make speech hollow. Reduce Strength to 65% if voice sounds thin.'},
+    ambient:{clean:'Steady room hum and HVAC-type broadband noise under the speech signal.',keep:'Speech intelligibility and vocal warmth.',s:70,x:1.6,p:'speech',warn:'Lip smacks and breaths may be reduced — usually desirable for voice recordings.'},
+    def:{clean:'Background noise in the speech range (250 Hz–4 kHz).',keep:'Vocal clarity and presence.',s:75,x:1.8,p:'speech',warn:'Adobe Podcast Enhance is free and far more powerful for voice specifically.'}
   },
   sports:{
-    crowd:{clean:'Stadium crowd roar and chatter in the 200 Hz–5 kHz band between commentary moments.',keep:'Commentary voice, referee whistle, and low-frequency impact sounds (ball kicks, etc.).',s:90,x:2.8,p:'live',warn:'Stadium reverb is part of the crowd — the algorithm will also reduce natural spatial feel.'},
-    chanting:{clean:'Rhythmic chant fundamentals and harmonics across 150 Hz–3.5 kHz.',keep:'Commentary and play-by-play audio which has more dynamic variation.',s:92,x:3.0,p:'live',warn:'Very loud chanting that competes with commentary is the hardest case — try processing twice.'},
-    def:{clean:'Broadband stadium ambient and crowd energy.',keep:'Commentary and game sound effects.',s:88,x:2.5,p:'live',warn:'Very dynamic sports audio may cause pumping — reduce Sensitivity if that happens.'}
+    crowd:{clean:'Stadium roar and chatter (200 Hz–5 kHz) between commentary.',keep:'Commentary voice, whistle, impact sounds.',s:88,x:2.5,p:'live',warn:'Stadium reverb is part of the crowd — spatial feel may be reduced too.'},
+    chanting:{clean:'Rhythmic chant fundamentals and harmonics (150 Hz–3.5 kHz).',keep:'Commentary and play-by-play which has more dynamic variation.',s:90,x:2.8,p:'live',warn:'Very loud chanting competing with commentary is the hardest case — try processing twice.'},
+    def:{clean:'Broadband stadium ambient and crowd energy.',keep:'Commentary and game sound effects.',s:85,x:2.2,p:'live',warn:'Dynamic sports audio may cause pumping — reduce Sensitivity if that happens.'}
   },
   outdoor:{
-    traffic:{clean:'Low-frequency traffic rumble (40–200 Hz) and broadband wind/road noise.',keep:'Voice and foreground audio above the traffic spectral floor.',s:85,x:2.0,p:'standard',warn:'Heavy bass reduction can make the recording sound thin — try the Music profile to preserve low-end.'},
-    ambient:{clean:'Steady outdoor ambient hum, wind, and general environmental noise.',keep:'Bird calls, voices, and transient foreground sounds which spike above the ambient floor.',s:75,x:1.8,p:'standard',warn:'Intermittent wind gusts are hard to separate — results are best on sections with steady noise.'},
-    def:{clean:'Outdoor ambient and environmental noise.',keep:'Foreground audio with dynamic peaks above the noise floor.',s:80,x:2.0,p:'standard',warn:'If the noise is highly variable, spectral subtraction works best on the steadier sections.'}
+    traffic:{clean:'Low-frequency traffic rumble (40–200 Hz) and broadband wind/road noise.',keep:'Voice and foreground audio above the spectral floor.',s:80,x:1.8,p:'standard',warn:'Heavy bass reduction makes recordings thin — try the Music profile to preserve low-end.'},
+    ambient:{clean:'Steady outdoor hum, wind, and environmental noise.',keep:'Bird calls, voices, and transient foreground sounds.',s:72,x:1.6,p:'standard',warn:'Intermittent wind gusts are hard to separate — best results on steady noise sections.'},
+    def:{clean:'Outdoor ambient and environmental noise.',keep:'Foreground audio with dynamic peaks.',s:78,x:1.8,p:'standard',warn:'Spectral subtraction works best when noise is steady, not highly variable.'}
   },
   indoor:{
-    hvac:{clean:'HVAC tonal hum (50/60 Hz harmonics) plus broadband air-rush above 2 kHz.',keep:'Speech and music. HVAC noise is very steady so the noise estimate will be highly accurate.',s:70,x:1.6,p:'standard',warn:'If a pitch residue remains, raise Sensitivity to 2.0 to catch its harmonics.'},
-    ambient:{clean:'Room tone, air conditioning hum, and low-level ambient noise across all frequencies.',keep:'Voices and instrument content which sit dynamically above the room noise floor.',s:72,x:1.7,p:'standard',warn:'Very reverberant rooms add energy that can look like noise — some natural room feel may be reduced.'},
-    crowd:{clean:'Indoor crowd murmur in the 300 Hz–3.5 kHz speech range, identifiable during speaker pauses.',keep:'Primary speaker or instrument content which peaks above the crowd floor.',s:82,x:2.2,p:'standard',warn:'Crowded rooms where noise level equals the signal level will not clean well — lower expectations.'},
-    def:{clean:'Indoor ambient and background noise.',keep:'Foreground speech and music.',s:75,x:1.8,p:'standard',warn:'Listen to a short cleaned section before processing the full file.'}
+    hvac:{clean:'HVAC tonal hum (50/60 Hz harmonics) plus broadband air-rush above 2 kHz.',keep:'Speech and music. Very steady noise = highly accurate estimate.',s:68,x:1.5,p:'standard',warn:'If a pitch residue remains, raise Sensitivity to 2.0 to catch harmonics.'},
+    ambient:{clean:'Room tone, AC hum, and low-level ambient noise across all frequencies.',keep:'Voices and instruments above the room noise floor.',s:70,x:1.6,p:'standard',warn:'Reverberant rooms add energy that looks like noise — some room feel may be reduced.'},
+    crowd:{clean:'Indoor crowd murmur (300 Hz–3.5 kHz) identifiable during pauses.',keep:'Primary speaker or instrument peaking above the crowd floor.',s:80,x:2.0,p:'standard',warn:'If noise equals signal level, results will be limited — lower expectations.'},
+    def:{clean:'Indoor ambient and background noise.',keep:'Foreground speech and music.',s:72,x:1.6,p:'standard',warn:'Listen to a short section before processing the full file.'}
   },
   podcast:{
-    ambient:{clean:'Consistent room tone and background hum under the voice signal.',keep:'Voice warmth, breath, and natural room resonance. Podcast audio is the ideal case for this algorithm.',s:65,x:1.5,p:'speech',warn:'Breath and mouth noise will also be partially reduced — that is usually desirable.'},
-    hvac:{clean:'HVAC hum and air conditioner noise, which is very steady and easy to estimate.',keep:'Voice fundamentals and the acoustic character of the recording space.',s:62,x:1.4,p:'speech',warn:'Do not over-process — podcast listeners expect some room sound; aggressive cleaning sounds unnatural.'},
-    crowd:{clean:'Office chatter or background voices below the primary speaker.',keep:'Main speaker voice clarity and intelligibility (250 Hz–4 kHz).',s:75,x:1.8,p:'speech',warn:'If background voices are as loud as the main speaker, separation will be incomplete.'},
-    def:{clean:'Background ambient, room tone, and low-level noise.',keep:'Voice clarity and warmth.',s:65,x:1.5,p:'speech',warn:'Less is more for podcast cleaning — start conservative and re-run if needed.'}
+    ambient:{clean:'Consistent room tone and background hum under the voice.',keep:'Voice warmth, breath, and natural room resonance.',s:65,x:1.4,p:'speech',warn:'Breath and mouth noise will also be reduced — usually desirable.'},
+    hvac:{clean:'HVAC hum and AC noise. Very steady = highly accurate estimate.',keep:'Voice fundamentals and acoustic character of the space.',s:60,x:1.3,p:'speech',warn:'Do not over-process — podcast listeners expect some room sound.'},
+    crowd:{clean:'Office chatter or background voices below the main speaker.',keep:'Main speaker voice clarity (250 Hz–4 kHz).',s:72,x:1.7,p:'speech',warn:'Background voices as loud as the main speaker cannot be cleanly separated.'},
+    def:{clean:'Background ambient, room tone, and low-level noise.',keep:'Voice clarity and warmth.',s:62,x:1.4,p:'speech',warn:'Less is more — start conservative and re-run if needed.'}
   }
 };
-
 function getAdvice(source,noise){
   var s=ADVICE[source]||ADVICE.speech;
   return s[noise]||s['def']||ADVICE.speech['def'];
 }
-
 function runAdvisor(){
-  var source=document.getElementById('ai-source').value||'speech';
-  var noise=document.getElementById('ai-noise').value||'crowd';
-  var a=getAdvice(source,noise);
-  var profNames={standard:'Standard',music:'Studio / Music',live:'Live Venue',speech:'Speech / Voice'};
-  var profDiff=a.p!==profile;
-  var respBox=document.getElementById('ai-response');
-  respBox.style.display='block';
-  respBox.innerHTML=
+  var src=document.getElementById('ai-source').value||'speech';
+  var nz=document.getElementById('ai-noise').value||'crowd';
+  var a=getAdvice(src,nz);
+  var pn={standard:'Standard',music:'Studio / Music',live:'Live Venue',speech:'Speech / Voice'};
+  var pd=a.p!==profile;
+  var rb=document.getElementById('ai-response');
+  rb.style.display='block';
+  rb.innerHTML=
     blk('head-clean','WHAT WILL BE CLEANED',a.clean)+
-    blk('head-keep', 'WHAT WILL BE KEPT',   a.keep)+
-    blk('head-rec',  'RECOMMENDED SETTINGS',
+    blk('head-keep','WHAT WILL BE KEPT',a.keep)+
+    blk('head-rec','RECOMMENDED SETTINGS',
       'Strength: <span class="setting-chip" onclick="applyChip(\'strength\','+a.s+',this)">'+a.s+'%</span> &nbsp;'
       +'Sensitivity: <span class="setting-chip" onclick="applyChip(\'sensitivity\','+a.x+',this)">'+a.x+'×</span>'
-      +(profDiff?' &nbsp;Profile: <span class="setting-chip" onclick="applyProfile(\''+a.p+'\',this)">'+profNames[a.p]+'</span>':'')
-    )+
-    blk('head-warn','CAUTION',a.warn);
+      +(pd?' &nbsp;Profile: <span class="setting-chip" onclick="applyProfile(\''+a.p+'\',this)">'+pn[a.p]+'</span>':'')
+    )+blk('head-warn','CAUTION',a.warn);
 }
-
 function blk(hc,title,body){
   return '<div class="ai-block"><div class="ai-block-head '+hc+'">'+title+'</div>'
-       + '<div class="ai-block-body">'+body+'</div></div>';
+       +'<div class="ai-block-body">'+body+'</div></div>';
 }
-
 function applyChip(type,val,el){
   if(el.classList.contains('chip-applied'))return;
   if(type==='strength'){
@@ -642,46 +712,37 @@ function applyChip(type,val,el){
   el.textContent=(type==='strength'?val+'%':val+'×')+' ✓';
   updateArtifactHint();
 }
-
 function applyProfile(p,el){
   if(el.classList.contains('chip-applied'))return;
   document.querySelectorAll('.profile-item').forEach(function(x){x.classList.remove('active');});
   document.querySelector('[data-p="'+p+'"]').classList.add('active');
   profile=p;renderFreqMap(p);
-  el.classList.add('chip-applied');
-  el.textContent+=' ✓';
-}
-
-// Show artifact hint when settings are aggressive
-function updateArtifactHint(){
-  var sens=parseFloat(document.getElementById('sensitivity').value);
-  var str=parseFloat(document.getElementById('strength').value);
-  var hint=document.getElementById('artifact-hint');
-  hint.style.display=(sens>=2.5||str>=0.85)?'block':'none';
+  el.classList.add('chip-applied');el.textContent+=' ✓';
 }
 
 // ── Events ────────────────────────────────────────────────────────────────────
-document.getElementById('drop-zone').addEventListener('click',function(){
-  document.getElementById('file-input').click();
+var dz=document.getElementById('drop-zone');
+dz.addEventListener('click',function(){document.getElementById('file-input').click();});
+dz.addEventListener('dragover',function(e){e.preventDefault();dz.classList.add('drag-over');});
+dz.addEventListener('dragleave',function(){dz.classList.remove('drag-over');});
+dz.addEventListener('drop',function(e){
+  e.preventDefault();dz.classList.remove('drag-over');
+  var f=e.dataTransfer.files[0];
+  if(f&&f.type.startsWith('audio/'))loadFile(f);
+  else showError('Please drop an audio file (MP3, WAV, OGG, M4A).');
 });
-document.getElementById('file-input').addEventListener('change',function(e){
-  if(e.target.files[0])loadFile(e.target.files[0]);
-});
+document.getElementById('file-input').addEventListener('change',function(e){if(e.target.files[0])loadFile(e.target.files[0]);});
 document.querySelectorAll('.profile-item').forEach(function(el){
   el.addEventListener('click',function(){
     document.querySelectorAll('.profile-item').forEach(function(x){x.classList.remove('active');});
-    el.classList.add('active');
-    profile=el.getAttribute('data-p');
-    renderFreqMap(profile);
+    el.classList.add('active');profile=el.getAttribute('data-p');renderFreqMap(profile);
   });
 });
 document.getElementById('strength').addEventListener('input',function(){
-  document.getElementById('strength-val').textContent=Math.round(this.value*100)+'%';
-  updateArtifactHint();
+  document.getElementById('strength-val').textContent=Math.round(this.value*100)+'%';updateArtifactHint();
 });
 document.getElementById('sensitivity').addEventListener('input',function(){
-  document.getElementById('sensitivity-val').textContent=parseFloat(this.value).toFixed(1)+'×';
-  updateArtifactHint();
+  document.getElementById('sensitivity-val').textContent=parseFloat(this.value).toFixed(1)+'×';updateArtifactHint();
 });
 document.getElementById('process-btn').addEventListener('click',handleProcess);
 document.getElementById('play-orig-btn').addEventListener('click',function(){
@@ -722,7 +783,7 @@ function loadFile(f){
       document.getElementById('process-btn').disabled=false;
       document.getElementById('play-orig-btn').style.display='block';
       renderFreqMap(profile);
-      setTimeout(function(){drawWaveform(origBuf,false);},50);
+      setTimeout(function(){drawWaveform(false);},50);
     },function(){showError('Could not decode. Try MP3, WAV, OGG, or M4A.');});
   };
   reader.readAsArrayBuffer(f);
@@ -738,7 +799,7 @@ function handleProcess(){
   document.getElementById('download-btn').style.display='none';
   document.getElementById('nr-badge').style.display='none';
   document.getElementById('wf-proc-label').textContent='';
-  var origRMS=bufferRMS(origBuf);
+  var origRMS=bufRMS(origBuf);
   var strength=parseFloat(document.getElementById('strength').value);
   var sensitivity=parseFloat(document.getElementById('sensitivity').value);
   var nCh=origBuf.numberOfChannels;
@@ -748,15 +809,13 @@ function handleProcess(){
   function nextCh(){
     if(ch>=nCh){
       procBuf=out;setProgress(100);
-      // Noise reduction metric
-      var procRMS=bufferRMS(procBuf);
-      var reduction=Math.max(0,Math.min(99,Math.round((1-procRMS/origRMS)*100)));
-      document.getElementById('nr-val').textContent=reduction+'% less energy';
-      document.getElementById('nr-bar').style.width=reduction+'%';
+      var pRMS=bufRMS(procBuf);
+      var red=Math.max(0,Math.min(99,Math.round((1-pRMS/origRMS)*100)));
+      document.getElementById('nr-val').textContent=red+'% less energy';
+      document.getElementById('nr-bar').style.width=red+'%';
       document.getElementById('nr-badge').style.display='block';
-      // Update waveform to show overlay
       document.getElementById('wf-proc-label').textContent='CLEANED';
-      drawWaveform(origBuf,true);
+      drawWaveform(true);
       document.getElementById('play-proc-btn').style.display='block';
       document.getElementById('download-btn').style.display='block';
       btn.textContent='Remove Crowd Noise';btn.disabled=false;
