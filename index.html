@@ -4,16 +4,340 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Clearwave</title>
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { min-height: 100vh; background: #0a0c14; color: #c8d4e8; font-family: system-ui, sans-serif; padding: 20px 16px; }
+    h1 { font-size: 22px; font-weight: 700; color: #3de8ff; letter-spacing: 3px; }
+    .sub { font-size: 12px; color: #ffffff30; margin-top: 3px; margin-bottom: 24px; }
+    #drop-zone { border: 1px dashed #ffffff18; border-radius: 12px; padding: 28px 16px; text-align: center; cursor: pointer; margin-bottom: 16px; background: #ffffff04; }
+    #drop-zone:hover { border-color: #3de8ff40; }
+    .fname { font-size: 14px; color: #3de8ff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .fmeta { font-size: 12px; color: #ffffff30; margin-top: 4px; }
+    .replace { font-size: 12px; color: #8899aa; margin-top: 8px; }
+    .error { background: #1a0808; border: 1px solid #ff444440; border-radius: 8px; padding: 10px 14px; color: #ff6060; font-size: 13px; margin-bottom: 16px; display: none; }
+    .card { background: #111520; border-radius: 12px; padding: 16px; margin-bottom: 16px; display: none; }
+    .card-label { font-size: 11px; color: #ffffff30; letter-spacing: 1px; margin-bottom: 12px; }
+    .profile-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 8px; margin-bottom: 6px; cursor: pointer; border: 1px solid transparent; }
+    .profile-item:hover { background: #ffffff06; }
+    .profile-item.active { background: #3de8ff10; border-color: #3de8ff40; }
+    .profile-item.active .p-name { color: #3de8ff; }
+    .p-emoji { font-size: 18px; }
+    .p-name { font-size: 13px; color: #8899aa; }
+    .p-desc { font-size: 11px; color: #ffffff25; }
+    .slider-row { margin-bottom: 16px; }
+    .slider-top { display: flex; justify-content: space-between; margin-bottom: 6px; }
+    .slider-lbl { font-size: 12px; color: #8899aa; }
+    .slider-val { font-size: 13px; color: #3de8ff; font-weight: 600; }
+    input[type=range] { width: 100%; accent-color: #3de8ff; }
+    .btn { width: 100%; padding: 13px; border-radius: 10px; border: 1px solid #ffffff12; background: transparent; color: #8899aa; font-size: 13px; cursor: pointer; margin-bottom: 10px; }
+    #process-btn { border-color: #3de8ff50; background: #3de8ff15; color: #3de8ff; font-size: 14px; font-weight: 600; display: none; }
+    #process-btn:disabled { border-color: #ffffff10; background: #1a2535; color: #ffffff40; cursor: not-allowed; }
+    #play-orig-btn { display: none; }
+    #play-orig-btn.active { border-color: #3de8ff60; background: #3de8ff12; color: #3de8ff; }
+    #play-proc-btn { display: none; }
+    #play-proc-btn.active { border-color: #ff7d4560; background: #ff7d4512; color: #ff7d45; }
+    #download-btn { display: none; border-color: #50dd9040; background: #50dd9010; color: #50dd90; }
+    .progress-wrap { height: 3px; background: #0e1825; border-radius: 2px; margin-bottom: 16px; overflow: hidden; display: none; }
+    .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #3de8ff, #0070ff); transition: width 0.25s; }
+    .footer { font-size: 11px; color: #ffffff10; text-align: center; margin-top: 16px; }
+  </style>
 </head>
 <body>
-  <div id="root"></div>
-  <script type="text/babel" src="app.jsx"></script>
-  <script type="text/babel">
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(React.createElement(App));
-  </script>
+  <h1>CLEARWAVE</h1>
+  <div class="sub">Crowd Noise Remover &middot; runs in your browser</div>
+
+  <div id="drop-zone">
+    <input id="file-input" type="file" accept="audio/*" style="display:none"/>
+    <div id="dz-empty">
+      <div style="font-size:32px;margin-bottom:8px">&#127925;</div>
+      <div style="font-size:14px;color:#8899aa">Tap to choose audio file</div>
+      <div style="font-size:11px;color:#ffffff25;margin-top:4px">MP3 &middot; WAV &middot; OGG &middot; M4A &middot; FLAC</div>
+    </div>
+    <div id="dz-loaded" style="display:none">
+      <div class="fname" id="fname"></div>
+      <div class="fmeta" id="fmeta"></div>
+      <div class="replace">Tap to replace</div>
+    </div>
+  </div>
+
+  <div class="error" id="error-box"></div>
+
+  <div class="card" id="card-profile">
+    <div class="card-label">FILTER PROFILE</div>
+    <div class="profile-item active" data-p="standard">
+      <span class="p-emoji">&#9881;&#65039;</span>
+      <div><div class="p-name">Standard</div><div class="p-desc">Flat subtraction, any audio</div></div>
+    </div>
+    <div class="profile-item" data-p="music">
+      <span class="p-emoji">&#127925;</span>
+      <div><div class="p-name">Studio</div><div class="p-desc">Protects bass, targets chatter</div></div>
+    </div>
+    <div class="profile-item" data-p="live">
+      <span class="p-emoji">&#127908;</span>
+      <div><div class="p-name">Live</div><div class="p-desc">Aggressive mids for venues</div></div>
+    </div>
+  </div>
+
+  <div class="card" id="card-controls">
+    <div class="card-label">CONTROLS</div>
+    <div class="slider-row">
+      <div class="slider-top">
+        <span class="slider-lbl">Reduction Strength</span>
+        <span class="slider-val" id="strength-val">70%</span>
+      </div>
+      <input type="range" id="strength" min="0.1" max="1.0" step="0.05" value="0.7"/>
+    </div>
+    <div class="slider-row">
+      <div class="slider-top">
+        <span class="slider-lbl">Sensitivity</span>
+        <span class="slider-val" id="sensitivity-val">1.5x</span>
+      </div>
+      <input type="range" id="sensitivity" min="0.5" max="3.0" step="0.1" value="1.5"/>
+    </div>
+  </div>
+
+  <button class="btn" id="process-btn" disabled>Remove Crowd Noise</button>
+  <div class="progress-wrap" id="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+  <button class="btn" id="play-orig-btn">Play Original</button>
+  <button class="btn" id="play-proc-btn">Play Cleaned</button>
+  <button class="btn" id="download-btn">Download WAV</button>
+
+  <div class="footer">All processing is local &mdash; your audio never leaves this page</div>
+
+<script>
+var origBuf=null,procBuf=null,audioCtx=null,currentSrc=null,profile='standard',playing=null;
+
+function getCtx(){if(!audioCtx||audioCtx.state==='closed')audioCtx=new AudioContext();return audioCtx;}
+function fmt(s){return Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');}
+function setProgress(p){document.getElementById('progress-bar').style.width=p+'%';}
+function showError(m){var e=document.getElementById('error-box');e.textContent=m;e.style.display='block';}
+function hideError(){document.getElementById('error-box').style.display='none';}
+
+function stopPlay(){
+  if(currentSrc){try{currentSrc.stop();}catch(e){} currentSrc=null;}
+  playing=null;
+  var o=document.getElementById('play-orig-btn'),p=document.getElementById('play-proc-btn');
+  o.classList.remove('active');p.classList.remove('active');
+  o.textContent='Play Original';p.textContent='Play Cleaned';
+}
+
+function fft(re,im){
+  var N=re.length;
+  for(var i=1,j=0;i<N;i++){
+    var bit=N>>1;for(;j&bit;bit>>=1)j^=bit;j^=bit;
+    if(i<j){var t=re[i];re[i]=re[j];re[j]=t;t=im[i];im[i]=im[j];im[j]=t;}
+  }
+  for(var len=2;len<=N;len<<=1){
+    var ang=-2*Math.PI/len,wRe=Math.cos(ang),wIm=Math.sin(ang);
+    for(var i=0;i<N;i+=len){
+      var uRe=1,uIm=0;
+      for(var k=0;k<len>>1;k++){
+        var e=i+k,o=i+k+(len>>1);
+        var tRe=uRe*re[o]-uIm*im[o],tIm=uRe*im[o]+uIm*re[o];
+        re[o]=re[e]-tRe;im[o]=im[e]-tIm;re[e]+=tRe;im[e]+=tIm;
+        var nu=uRe*wRe-uIm*wIm;uIm=uRe*wIm+uIm*wRe;uRe=nu;
+      }
+    }
+  }
+}
+function ifft(re,im){
+  var N=re.length;
+  for(var i=0;i<N;i++)im[i]=-im[i];
+  fft(re,im);
+  for(var i=0;i<N;i++){re[i]/=N;im[i]=-im[i]/N;}
+}
+function hann(N){
+  var w=new Float32Array(N);
+  for(var i=0;i<N;i++)w[i]=0.5*(1-Math.cos(2*Math.PI*i/(N-1)));
+  return w;
+}
+
+function processChannel(samples,strength,sensitivity,prof,sampleRate,onProgress){
+  return new Promise(function(resolve){
+    var N=2048,hop=N>>1,halfN=N>>1;
+    var win=hann(N),len=samples.length;
+    if(len<N){resolve(samples.slice());return;}
+    var totalFrames=Math.max(1,Math.floor((len-N)/hop)+1);
+    var binHz=function(k){return k*(sampleRate||44100)/N;};
+    var noiseEst=new Float32Array(halfN);
+    for(var i=0;i<halfN;i++)noiseEst[i]=Infinity;
+    var fi=0,pos=0;
+
+    function pass1(){
+      if(pos+N>len){smoothPass();return;}
+      var re=new Float32Array(N),im=new Float32Array(N);
+      for(var i=0;i<N;i++)re[i]=samples[pos+i]*win[i];
+      fft(re,im);
+      for(var k=0;k<halfN;k++){var m=Math.hypot(re[k],im[k]);if(m<noiseEst[k])noiseEst[k]=m;}
+      pos+=hop;fi++;
+      if(fi%80===0){onProgress(fi/totalFrames*0.35);setTimeout(pass1,0);}else pass1();
+    }
+
+    function smoothPass(){
+      var R=prof==='live'?9:6;
+      var smoothed=new Float32Array(halfN);
+      for(var k=0;k<halfN;k++){
+        var s=0,c=0;
+        for(var j=Math.max(0,k-R);j<=Math.min(halfN-1,k+R);j++){s+=noiseEst[j];c++;}
+        smoothed[k]=(prof==='live'?1.4:1.0)*s/c;
+      }
+      var output=new Float32Array(len+N),norm=new Float32Array(len+N);
+      fi=0;pos=0;
+      function pass2(){
+        if(pos+N>len){
+          var result=new Float32Array(len);
+          for(var i=0;i<len;i++)result[i]=norm[i]>1e-9?output[i]/norm[i]:0;
+          resolve(result);return;
+        }
+        var re=new Float32Array(N),im=new Float32Array(N);
+        for(var i=0;i<N;i++)re[i]=samples[pos+i]*win[i];
+        fft(re,im);
+        for(var k=1;k<halfN;k++){
+          var mag=Math.hypot(re[k],im[k]),phase=Math.atan2(im[k],re[k]),hz=binHz(k);
+          var sc=strength,fl=0.01;
+          if(prof==='music'){
+            if(hz<200){sc*=0.15;fl=0.6;}else if(hz<900){sc*=0.35;fl=0.4;}
+            else if(hz<3500){sc*=0.65;fl=0.25;}else if(hz<8000){sc*=1.6;fl=0.08;}else{sc*=1.3;fl=0.06;}
+          }else if(prof==='live'){
+            if(hz<120){sc*=0.3;fl=0.45;}else if(hz<400){sc*=0.6;fl=0.3;}
+            else if(hz<800){sc*=0.8;fl=0.22;}else if(hz<3500){sc*=1.2;fl=0.18;}
+            else if(hz<8000){sc*=1.7;fl=0.07;}else{sc*=1.4;fl=0.05;}
+          }
+          var nm=Math.max(mag-sensitivity*smoothed[k]*sc,fl*mag);
+          re[k]=nm*Math.cos(phase);im[k]=nm*Math.sin(phase);
+          re[N-k]=nm*Math.cos(-phase);im[N-k]=nm*Math.sin(-phase);
+        }
+        ifft(re,im);
+        for(var i=0;i<N;i++){output[pos+i]+=re[i]*win[i];norm[pos+i]+=win[i]*win[i];}
+        pos+=hop;fi++;
+        if(fi%80===0){onProgress(0.35+fi/totalFrames*0.65);setTimeout(pass2,0);}else pass2();
+      }
+      pass2();
+    }
+    pass1();
+  });
+}
+
+function encodeWAV(buf){
+  var nCh=buf.numberOfChannels,len=buf.length,sr=buf.sampleRate;
+  var ab=new ArrayBuffer(44+len*nCh*2),v=new DataView(ab);
+  function ws(o,s){for(var i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i));}
+  ws(0,'RIFF');v.setUint32(4,36+len*nCh*2,true);ws(8,'WAVE');ws(12,'fmt ');
+  v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,nCh,true);
+  v.setUint32(24,sr,true);v.setUint32(28,sr*nCh*2,true);
+  v.setUint16(32,nCh*2,true);v.setUint16(34,16,true);
+  ws(36,'data');v.setUint32(40,len*nCh*2,true);
+  var off=44;
+  for(var i=0;i<len;i++)for(var c=0;c<nCh;c++){
+    var s=Math.max(-1,Math.min(1,buf.getChannelData(c)[i]));
+    v.setInt16(off,s<0?s*32768:s*32767,true);off+=2;
+  }
+  return ab;
+}
+
+// Events
+document.getElementById('drop-zone').addEventListener('click',function(){document.getElementById('file-input').click();});
+document.getElementById('file-input').addEventListener('change',function(e){if(e.target.files[0])loadFile(e.target.files[0]);});
+
+document.querySelectorAll('.profile-item').forEach(function(el){
+  el.addEventListener('click',function(){
+    document.querySelectorAll('.profile-item').forEach(function(x){x.classList.remove('active');});
+    el.classList.add('active');
+    profile=el.getAttribute('data-p');
+  });
+});
+
+document.getElementById('strength').addEventListener('input',function(){
+  document.getElementById('strength-val').textContent=Math.round(this.value*100)+'%';
+});
+document.getElementById('sensitivity').addEventListener('input',function(){
+  document.getElementById('sensitivity-val').textContent=parseFloat(this.value).toFixed(1)+'x';
+});
+
+document.getElementById('process-btn').addEventListener('click',handleProcess);
+
+document.getElementById('play-orig-btn').addEventListener('click',function(){
+  if(playing==='orig'){stopPlay();return;}
+  stopPlay();playBuf(origBuf,'orig');
+  this.classList.add('active');this.textContent='Stop Original';
+});
+document.getElementById('play-proc-btn').addEventListener('click',function(){
+  if(playing==='proc'){stopPlay();return;}
+  stopPlay();playBuf(procBuf,'proc');
+  this.classList.add('active');this.textContent='Stop Cleaned';
+});
+document.getElementById('download-btn').addEventListener('click',function(){
+  var url=URL.createObjectURL(new Blob([encodeWAV(procBuf)],{type:'audio/wav'}));
+  var a=document.createElement('a');a.href=url;a.download='cleaned_audio.wav';a.click();
+  setTimeout(function(){URL.revokeObjectURL(url);},1000);
+});
+
+function loadFile(f){
+  hideError();procBuf=null;stopPlay();
+  document.getElementById('play-proc-btn').style.display='none';
+  document.getElementById('download-btn').style.display='none';
+  var reader=new FileReader();
+  reader.onload=function(e){
+    getCtx().decodeAudioData(e.target.result,function(buf){
+      origBuf=buf;
+      document.getElementById('fname').textContent=f.name;
+      document.getElementById('fmeta').textContent=(f.size/1048576).toFixed(1)+' MB · '+fmt(buf.duration);
+      document.getElementById('dz-empty').style.display='none';
+      document.getElementById('dz-loaded').style.display='block';
+      document.getElementById('card-profile').style.display='block';
+      document.getElementById('card-controls').style.display='block';
+      document.getElementById('process-btn').style.display='block';
+      document.getElementById('process-btn').disabled=false;
+      document.getElementById('play-orig-btn').style.display='block';
+    },function(){showError('Could not decode. Try MP3, WAV, OGG, or M4A.');});
+  };
+  reader.readAsArrayBuffer(f);
+}
+
+function handleProcess(){
+  if(!origBuf)return;
+  var btn=document.getElementById('process-btn');
+  btn.disabled=true;btn.textContent='Processing... 0%';
+  document.getElementById('progress-wrap').style.display='block';
+  setProgress(0);stopPlay();procBuf=null;
+  document.getElementById('play-proc-btn').style.display='none';
+  document.getElementById('download-btn').style.display='none';
+  var strength=parseFloat(document.getElementById('strength').value);
+  var sensitivity=parseFloat(document.getElementById('sensitivity').value);
+  var nCh=origBuf.numberOfChannels;
+  var ctx=getCtx();
+  var out=ctx.createBuffer(nCh,origBuf.length,origBuf.sampleRate);
+  var ch=0;
+  function nextCh(){
+    if(ch>=nCh){
+      procBuf=out;setProgress(100);
+      document.getElementById('play-proc-btn').style.display='block';
+      document.getElementById('download-btn').style.display='block';
+      btn.textContent='Remove Crowd Noise';btn.disabled=false;
+      document.getElementById('progress-wrap').style.display='none';
+      return;
+    }
+    processChannel(origBuf.getChannelData(ch),strength,sensitivity,profile,origBuf.sampleRate,function(p){
+      var pct=((ch+p)/nCh)*100;setProgress(pct);btn.textContent='Processing... '+Math.round(pct)+'%';
+    }).then(function(result){
+      out.getChannelData(ch).set(result);ch++;nextCh();
+    }).catch(function(e){
+      showError('Processing failed: '+e.message);
+      btn.textContent='Remove Crowd Noise';btn.disabled=false;
+      document.getElementById('progress-wrap').style.display='none';
+    });
+  }
+  nextCh();
+}
+
+function playBuf(buf,which){
+  var ctx=getCtx();
+  if(ctx.state==='suspended')ctx.resume();
+  var src=ctx.createBufferSource();
+  src.buffer=buf;src.connect(ctx.destination);src.start();
+  src.onended=function(){stopPlay();};
+  currentSrc=src;playing=which;
+}
+</script>
 </body>
 </html>
