@@ -184,6 +184,8 @@
       background: var(--muted); border-radius: 50%; transition: transform 0.2s, background 0.2s;
     }
     .toggle input:checked ~ .toggle-thumb { transform: translateX(16px); background: var(--green); box-shadow: 0 0 8px #4dffb460; }
+    .toggle-purple input:checked + .toggle-track { background: #b57bff40; }
+    .toggle-purple input:checked ~ .toggle-thumb { background: var(--purple); box-shadow: 0 0 8px #b57bff60; }
 
     #artifact-hint { display: none; background: #120a04; border: 1px solid #ff7d4520; border-radius: 8px; padding: 8px 12px; font-size: 11px; color: #ff7d4588; margin-top: 10px; line-height: 1.5; }
     #artifact-hint b { color: #ff7d45; }
@@ -439,6 +441,22 @@
           <b>Tip:</b> High settings may cause metallic artefacts. Lower Sensitivity or switch to <b>Standard</b>.
         </div>
 
+        <!-- Wembley / Mid-Side Toggle -->
+        <div class="preview-row" id="midside-row" style="display:none; margin-top:10px; padding-top:10px; border-top:1px solid var(--border);">
+          <div>
+            <div class="preview-label">Wembley Mode <span style="font-size:9px;color:var(--purple);font-family:'Space Mono',monospace;letter-spacing:1px;">MID-SIDE</span></div>
+            <div style="font-size:10px;color:#ffffff30;margin-top:2px;">Crushes stereo crowd, protects centre vocal</div>
+          </div>
+          <div class="toggle-wrap">
+            <span class="toggle-status on" id="midside-status">ON</span>
+            <label class="toggle toggle-purple">
+              <input type="checkbox" id="midside-toggle" checked/>
+              <div class="toggle-track"></div>
+              <div class="toggle-thumb"></div>
+            </label>
+          </div>
+        </div>
+
         <!-- Live Preview Toggle -->
         <div class="preview-row" id="preview-row" style="display:none;">
           <div>
@@ -458,8 +476,9 @@
       <!-- AI Advisor -->
       <div class="card" id="card-ai" style="margin-top:14px;">
         <div class="ai-header">
-          <div class="ai-dot"></div>
-          <div class="ai-title">AI NOISE ADVISOR</div>
+          <div class="ai-dot" id="ai-dot"></div>
+          <div class="ai-title">CLAUDE AI NOISE ADVISOR</div>
+          <span id="ai-model-badge" style="margin-left:auto;font-size:9px;font-family:'Space Mono',monospace;color:#b57bff80;border:1px solid #b57bff20;border-radius:5px;padding:2px 6px;letter-spacing:0.5px;">claude sonnet</span>
         </div>
         <div class="ai-selects">
           <select class="ai-select" id="ai-source">
@@ -482,8 +501,14 @@
           </select>
         </div>
         <textarea class="ai-describe" id="ai-describe" rows="2"
-          placeholder="Optional: extra context about your recording…"></textarea>
-        <button class="ai-ask-btn" onclick="runAdvisor()">✦ Analyse &amp; Advise</button>
+          placeholder="Describe your recording — e.g. 'MJ live at Wembley 1988, 70k crowd, constant roar'…"></textarea>
+        <button class="ai-ask-btn" id="ai-ask-btn" onclick="runAdvisor()">✦ Analyse &amp; Advise</button>
+        <div id="ai-thinking" style="display:none;margin-top:10px;padding:10px 12px;background:var(--surface2);border-radius:10px;border:1px solid #b57bff18;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="ai-dot" style="background:var(--purple);"></div>
+            <span style="font-size:11px;color:#b57bff;font-family:'Space Mono',monospace;letter-spacing:1px;" id="ai-thinking-text">ANALYSING…</span>
+          </div>
+        </div>
         <div class="ai-response" id="ai-response"></div>
       </div>
 
@@ -491,44 +516,62 @@
 
     <!-- FULL WIDTH: Free AI Tools -->
     <div class="card span2" id="card-free-ai">
-      <div class="card-label">FREE AI NOISE REMOVERS</div>
+      <div class="card-label">FREE AI TOOLS — MUSIC &amp; CONCERT GRADE</div>
       <div class="free-ai-intro">
-        For <b>loud crowds, screaming, or heavily noise-dominated recordings</b>, browser DSP has fundamental limits.
-        These neural-network tools use deep learning and will get far better results.
+        For <b>Wembley-level crowds, constant roar, or music-dominated recordings</b>, spectral subtraction hits a ceiling.
+        These neural source-separation tools are a different league — they have "ears" for instruments vs. crowd.
       </div>
-      <a class="tool-item" href="https://podcast.adobe.com/enhance" target="_blank" rel="noopener">
+      <a class="tool-item" href="https://vocalremover.org/" target="_blank" rel="noopener">
         <span class="tool-badge badge-web">WEB</span>
         <div class="tool-info">
-          <div class="tool-name">Adobe Podcast Enhance</div>
-          <div class="tool-desc">Best-in-class AI voice cleaning. Removes crowds, reverb, and room noise. Studio quality for speech.</div>
-          <div class="tool-limit">Free · Speech only · Up to 1 hr per file</div>
+          <div class="tool-name">VocalRemover.org <span style="font-size:10px;color:var(--green);margin-left:4px;">★ Best Free Pick</span></div>
+          <div class="tool-desc">Demucs-powered stem separation fully in the browser. Splits into vocals, drums, bass and other — keep the music stems, discard the crowd. No account needed.</div>
+          <div class="tool-limit">Free · No signup · Web · Concerts &amp; music</div>
         </div>
         <span class="tool-arrow">↗</span>
       </a>
       <a class="tool-item" href="https://ultimatevocalremover.com" target="_blank" rel="noopener">
         <span class="tool-badge badge-app">APP</span>
         <div class="tool-info">
-          <div class="tool-name">Ultimate Vocal Remover</div>
-          <div class="tool-desc">Free desktop app with multiple AI models (MDX-Net, VR Arch, Demucs). Best for concerts — isolate instruments or voice from crowd.</div>
-          <div class="tool-limit">Free · Windows &amp; Mac · Offline · Music &amp; voice</div>
+          <div class="tool-name">Ultimate Vocal Remover (UVR5)</div>
+          <div class="tool-desc">Free desktop app with MDX-Net, VR Arch and Demucs models. The gold standard for concert audio — isolate MJ's vocal from 70k crowd. Runs offline, no limits.</div>
+          <div class="tool-limit">Free · Windows &amp; Mac · Offline · Music &amp; concerts</div>
+        </div>
+        <span class="tool-arrow">↗</span>
+      </a>
+      <a class="tool-item" href="https://voice.ai/tools/stem-splitter" target="_blank" rel="noopener">
+        <span class="tool-badge badge-web">WEB</span>
+        <div class="tool-info">
+          <div class="tool-name">Voice.ai Stem Splitter</div>
+          <div class="tool-desc">Free online stem splitter — isolate vocals, instruments, beats and bass lines. Good for extracting the music out from under crowd noise in live recordings.</div>
+          <div class="tool-limit">Free · Web · No signup required</div>
+        </div>
+        <span class="tool-arrow">↗</span>
+      </a>
+      <a class="tool-item" href="https://moises.ai/" target="_blank" rel="noopener">
+        <span class="tool-badge badge-app">APP</span>
+        <div class="tool-info">
+          <div class="tool-name">Moises.ai</div>
+          <div class="tool-desc">AI stem separation with a free tier — vocal, drums, bass, other. Great for musicians who want to practice against a clean backing track extracted from a live recording.</div>
+          <div class="tool-limit">Free tier · Web &amp; mobile · Music-first</div>
         </div>
         <span class="tool-arrow">↗</span>
       </a>
       <a class="tool-item" href="https://github.com/facebookresearch/demucs" target="_blank" rel="noopener">
         <span class="tool-badge badge-oss">OSS</span>
         <div class="tool-info">
-          <div class="tool-name">Demucs (Meta AI)</div>
-          <div class="tool-desc">Neural source separation. Splits audio into vocals, drums, bass, other — keep what you want and discard the rest.</div>
-          <div class="tool-limit">Free · Python · Works on music &amp; concerts</div>
+          <div class="tool-name">Demucs (Meta AI) — Python</div>
+          <div class="tool-desc">The model behind most web tools above. Run it locally with GPU for full-speed 6-stem separation on any concert recording. The closest thing to a "Wembley fix" you can get free.</div>
+          <div class="tool-limit">Free · Python / GPU · No limits · Best quality</div>
         </div>
         <span class="tool-arrow">↗</span>
       </a>
-      <a class="tool-item" href="https://github.com/rikorose/DeepFilterNet" target="_blank" rel="noopener">
-        <span class="tool-badge badge-oss">OSS</span>
+      <a class="tool-item" href="https://podcast.adobe.com/enhance" target="_blank" rel="noopener">
+        <span class="tool-badge badge-web">WEB</span>
         <div class="tool-info">
-          <div class="tool-name">DeepFilterNet</div>
-          <div class="tool-desc">State-of-the-art real-time speech enhancement. Handles very noisy recordings that simple subtraction can't touch.</div>
-          <div class="tool-limit">Free · Python / Rust · Speech-focused</div>
+          <div class="tool-name">Adobe Podcast Enhance</div>
+          <div class="tool-desc">Best-in-class for speech — removes reverb, crowds, room noise and restores voice clarity. Use this if the goal is to isolate someone talking, not music.</div>
+          <div class="tool-limit">Free · Speech only · Up to 1 hr per file</div>
         </div>
         <span class="tool-arrow">↗</span>
       </a>
@@ -1086,6 +1129,11 @@ function loadFile(f){
       initWaveSurfer();
       // Create a temporary blob URL for WaveSurfer
       encodeAndLoadWaveSurfer(wsOrig, buf);
+
+      // Show Mid-Side toggle only for stereo files
+      var msr = document.getElementById('midside-row');
+      if(msr) msr.style.display = buf.numberOfChannels >= 2 ? 'flex' : 'none';
+
       toast('File loaded · '+fmt(buf.duration)+' · '+buf.sampleRate+' Hz', 'success');
     }, function(){
       showError('Could not decode. Try MP3, WAV, OGG, or M4A.');
@@ -1123,10 +1171,39 @@ function handleProcess(){
   var sensitivity = parseFloat(document.getElementById('sensitivity').value);
   var nCh = origBuf.numberOfChannels;
   var ctx = getCtx();
-  var outArrays = [];
   var origRMS = bufRMS(origBuf);
-  var pendingChannels = nCh;
   var sharedNoiseFloor = null, sharedAvgSignal = null;
+
+  // ── Mid-Side (Wembley) mode ─────────────────────────────
+  // When stereo + toggle is on: convert L/R → Mid/Side, process Mid at 20%
+  // strength and Side at 80%, then decode back to L/R.
+  // Crowd roar lives in the Side channel; lead vocal lives in Mid.
+  var useMidSide = (nCh >= 2 &&
+                    document.getElementById('midside-toggle') &&
+                    document.getElementById('midside-toggle').checked);
+
+  // Build the array of virtual channels to process
+  var channels = []; // { data: Float32Array, strengthMult: number }
+  if(useMidSide){
+    var Ldata = origBuf.getChannelData(0);
+    var Rdata = origBuf.getChannelData(1);
+    var mid  = new Float32Array(origBuf.length);
+    var side = new Float32Array(origBuf.length);
+    for(var i=0;i<origBuf.length;i++){
+      mid[i]  = (Ldata[i] + Rdata[i]) * 0.5;
+      side[i] = (Ldata[i] - Rdata[i]) * 0.5;
+    }
+    channels.push({data:mid,  strengthMult:0.20}); // Mid  — protect the vocal
+    channels.push({data:side, strengthMult:1.00}); // Side — crush the crowd
+    // Any extra channels pass through unprocessed
+  } else {
+    for(var c=0;c<nCh;c++){
+      channels.push({data:origBuf.getChannelData(c).slice(), strengthMult:1.0});
+    }
+  }
+
+  var outArrays   = new Array(channels.length);
+  var pending     = channels.length;
 
   // Create/reuse worker
   if(!dspWorker){
@@ -1134,44 +1211,63 @@ function handleProcess(){
     dspWorker = new Worker(URL.createObjectURL(blob));
   }
 
-  var chansStarted = 0;
-  function processNextChannel(ch){
-    if(ch >= nCh) return;
-    var samples = origBuf.getChannelData(ch).slice(); // copy to transfer
+  function processNextChannel(idx){
+    if(idx >= channels.length) return;
+    var ch      = channels[idx];
+    var samples = ch.data.slice(); // copy so we can transfer the buffer
+    var effStr  = Math.min(1.0, strength * ch.strengthMult);
 
     dspWorker.onmessage = function(e){
       var d = e.data;
       if(d.type==='progress'){
-        var pct = ((ch + d.pct) / nCh) * 100;
+        var pct = ((idx + d.pct) / channels.length) * 100;
         setProgress(pct);
         btn.textContent = '⚡ Processing… '+Math.round(pct)+'%';
       } else if(d.type==='result'){
-        outArrays[ch] = d.result;
+        outArrays[idx] = d.result;
         if(!sharedNoiseFloor) sharedNoiseFloor = d.noiseFloor;
-        if(!sharedAvgSignal) sharedAvgSignal = d.avgSignal;
-        pendingChannels--;
-        if(pendingChannels <= 0) finalize();
-        else processNextChannel(ch+1);
+        if(!sharedAvgSignal)  sharedAvgSignal  = d.avgSignal;
+        pending--;
+        if(pending <= 0) finalize();
+        else processNextChannel(idx+1);
       }
     };
 
-    dspWorker.postMessage({ type:'process', samples:samples, sampleRate:origBuf.sampleRate,
-      strength:strength, sensitivity:sensitivity, profile:profile }, [samples.buffer]);
+    dspWorker.postMessage({
+      type:'process', samples:samples, sampleRate:origBuf.sampleRate,
+      strength:effStr, sensitivity:sensitivity, profile:profile
+    }, [samples.buffer]);
   }
 
   function finalize(){
     var out = ctx.createBuffer(nCh, origBuf.length, origBuf.sampleRate);
-    for(var c=0;c<nCh;c++) out.getChannelData(c).set(outArrays[c]);
+
+    if(useMidSide){
+      // Decode Mid+Side back to L and R
+      var midOut  = outArrays[0];
+      var sideOut = outArrays[1];
+      var outL = out.getChannelData(0);
+      var outR = out.getChannelData(1);
+      for(var i=0;i<origBuf.length;i++){
+        outL[i] = midOut[i] + sideOut[i];
+        outR[i] = midOut[i] - sideOut[i];
+      }
+      // Pass any extra channels through unchanged
+      for(var c=2;c<nCh;c++) out.getChannelData(c).set(origBuf.getChannelData(c));
+    } else {
+      for(var c=0;c<nCh;c++) out.getChannelData(c).set(outArrays[c]);
+    }
+
     procBuf = out;
     noiseFloorData = sharedNoiseFloor;
-    avgSignalData = sharedAvgSignal;
+    avgSignalData  = sharedAvgSignal;
 
     var pRMS = bufRMS(procBuf);
-    var red = Math.max(0, Math.min(99, Math.round((1 - pRMS/origRMS)*100)));
+    var red  = Math.max(0, Math.min(99, Math.round((1 - pRMS/origRMS)*100)));
     document.getElementById('nr-val').textContent = red+'% less energy';
     document.getElementById('nr-bar').style.width = red+'%';
     document.getElementById('nr-badge').style.display = 'block';
-    document.getElementById('wf-proc-label').textContent = 'CLEANED';
+    document.getElementById('wf-proc-label').textContent = useMidSide ? 'CLEANED (M-S)' : 'CLEANED';
     document.getElementById('waveform-proc').classList.add('visible');
 
     // Load processed audio into WaveSurfer
@@ -1183,14 +1279,15 @@ function handleProcess(){
     document.getElementById('preview-row').style.display = 'flex';
 
     document.getElementById('play-proc-btn').style.display = 'block';
-    document.getElementById('download-btn').style.display = 'block';
+    document.getElementById('download-btn').style.display  = 'block';
     setProgress(100);
     btn.textContent = '⚡ Remove Crowd Noise';
     btn.disabled = false;
     btn.classList.remove('processing');
     document.getElementById('progress-wrap').style.display = 'none';
 
-    toast('Done! '+red+'% noise energy removed', 'success', 4000);
+    var modeLabel = useMidSide ? ' · Wembley M-S mode' : '';
+    toast('Done! '+red+'% noise energy removed'+modeLabel, 'success', 4000);
   }
 
   processNextChannel(0);
@@ -1308,23 +1405,145 @@ function getAdvice(source, noise){
   var s = ADVICE[source] || ADVICE.speech;
   return s[noise] || s['def'] || ADVICE.speech['def'];
 }
-function runAdvisor(){
-  var src = document.getElementById('ai-source').value||'speech';
-  var nz  = document.getElementById('ai-noise').value||'crowd';
-  var a   = getAdvice(src, nz);
-  var pn  = {standard:'Standard',music:'Studio / Music',live:'Live Venue',speech:'Speech / Voice'};
-  var pd  = a.p !== profile;
-  var rb  = document.getElementById('ai-response');
-  rb.style.display = 'block';
-  rb.innerHTML =
-    blk('head-clean','WHAT WILL BE CLEANED', a.clean)+
-    blk('head-keep', 'WHAT WILL BE KEPT',    a.keep)+
-    blk('head-rec',  'RECOMMENDED SETTINGS',
-      'Strength: <span class="setting-chip" onclick="applyChip(\'strength\','+a.s+',this)">'+a.s+'%</span> &nbsp;'
-      +'Sensitivity: <span class="setting-chip" onclick="applyChip(\'sensitivity\','+a.x+',this)">'+a.x+'×</span>'
-      +(pd?' &nbsp;Profile: <span class="setting-chip" onclick="applyProfile(\''+a.p+'\',this)">'+pn[a.p]+'</span>':'')
-    )+blk('head-warn','CAUTION', a.warn);
-  toast('AI advice ready', 'info', 2000);
+/* ═══════════════════════════════════════════════════════════
+   CLAUDE AI ADVISOR  (live API — claude-sonnet-4-20250514)
+═══════════════════════════════════════════════════════════ */
+async function runAdvisor(){
+  var src  = document.getElementById('ai-source').value || '';
+  var nz   = document.getElementById('ai-noise').value  || '';
+  var desc = (document.getElementById('ai-describe').value || '').trim();
+
+  if(!src && !nz && !desc){
+    toast('Pick a source or noise type first', 'warn', 2500);
+    return;
+  }
+
+  // UI loading state
+  var btn = document.getElementById('ai-ask-btn');
+  btn.disabled = true; btn.textContent = '⟳ Thinking…';
+  document.getElementById('ai-thinking').style.display = 'block';
+  document.getElementById('ai-response').style.display = 'none';
+  document.getElementById('ai-dot').style.background = 'var(--purple)';
+
+  var thinkingPhrases = ['ANALYSING…','CHECKING FREQUENCIES…','CALCULATING SNR…','BUILDING ADVICE…'];
+  var ti=0, thinkingInterval = setInterval(function(){
+    ti=(ti+1)%thinkingPhrases.length;
+    document.getElementById('ai-thinking-text').textContent = thinkingPhrases[ti];
+  }, 900);
+
+  // Build context from loaded file
+  var fileCtx = '';
+  if(origBuf){
+    fileCtx = 'Loaded file: '+origBuf.duration.toFixed(1)+'s, '+origBuf.sampleRate+'Hz, '+origBuf.numberOfChannels+'ch. ';
+    fileCtx += 'Current profile: '+profile+'. ';
+    fileCtx += 'Current strength: '+Math.round(parseFloat(document.getElementById('strength').value)*100)+'%. ';
+    fileCtx += 'Current sensitivity: '+parseFloat(document.getElementById('sensitivity').value).toFixed(1)+'×. ';
+    if(document.getElementById('midside-toggle') && document.getElementById('midside-toggle').checked && origBuf.numberOfChannels >= 2){
+      fileCtx += 'Wembley Mid-Side mode is ON. ';
+    }
+  }
+
+  var systemPrompt = `You are an expert audio engineer advisor embedded in "Clearwave", a browser-based crowd noise remover.
+The app uses Wiener filter spectral subtraction with these controls:
+- Profile: standard | music | live | speech
+- Strength: 0.1–1.0 (shown as 10%–100%)
+- Sensitivity: 0.5–4.0× (noise floor multiplier)
+- Wembley Mode (Mid-Side): stereo only — crushes Side channel (crowd), protects Mid channel (lead vocal)
+
+Respond ONLY with a JSON object. No prose, no markdown, no backticks. Exactly this shape:
+{
+  "clean": "one sentence: what will be removed",
+  "keep": "one sentence: what will be preserved",
+  "strength": <integer 10-100>,
+  "sensitivity": <number 0.5-4.0, one decimal>,
+  "profile": "standard|music|live|speech",
+  "midside": <true|false>,
+  "warn": "one sentence caution or tip",
+  "insight": "two sentences: why this specific recording is hard, what the Mid-Side or profile choice achieves"
+}`;
+
+  var userMsg = '';
+  if(src)  userMsg += 'Source: '+src+'. ';
+  if(nz)   userMsg += 'Noise type: '+nz+'. ';
+  if(desc) userMsg += 'User description: '+desc+'. ';
+  if(fileCtx) userMsg += fileCtx;
+  userMsg += 'Give me the optimal Clearwave settings for this recording.';
+
+  try {
+    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 500,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userMsg }]
+      })
+    });
+
+    var data = await resp.json();
+    var raw = (data.content||[]).map(function(b){ return b.text||''; }).join('');
+    // Strip any accidental fences
+    raw = raw.replace(/```json|```/g,'').trim();
+    var a = JSON.parse(raw);
+
+    clearInterval(thinkingInterval);
+    document.getElementById('ai-thinking').style.display = 'none';
+    document.getElementById('ai-dot').style.background = 'var(--cyan)';
+
+    // Profile name map
+    var pn = {standard:'Standard',music:'Studio / Music',live:'Live Venue',speech:'Speech / Voice'};
+    var pd = a.profile && a.profile !== profile;
+    var showMs = (a.midside === true && origBuf && origBuf.numberOfChannels >= 2);
+    var msChip = showMs
+      ? ' &nbsp;<span class="setting-chip" onclick="applyMidside(this)" style="border-color:#b57bff30;color:var(--purple);">Wembley M-S ✦</span>'
+      : '';
+
+    var rb = document.getElementById('ai-response');
+    rb.style.display = 'block';
+    rb.innerHTML =
+      blk('head-clean','WHAT WILL BE CLEANED', a.clean||'—')+
+      blk('head-keep', 'WHAT WILL BE KEPT',    a.keep||'—')+
+      (a.insight ? blk('head-rec','AUDIO ENGINEERING INSIGHT', a.insight) : '')+
+      blk('head-rec','RECOMMENDED SETTINGS',
+        'Strength: <span class="setting-chip" onclick="applyChip(\'strength\','+(a.strength||70)+',this)">'+(a.strength||70)+'%</span> &nbsp;'
+        +'Sensitivity: <span class="setting-chip" onclick="applyChip(\'sensitivity\','+(a.sensitivity||1.5)+',this)">'+(a.sensitivity||1.5)+'×</span>'
+        +(pd?' &nbsp;Profile: <span class="setting-chip" onclick="applyProfile(\''+a.profile+'\',this)">'+pn[a.profile]+'</span>':'')
+        +msChip
+      )+
+      blk('head-warn','CAUTION', a.warn||'Listen before committing to the full file.');
+
+    toast('Claude analysis ready', 'success', 2000);
+  } catch(err){
+    clearInterval(thinkingInterval);
+    document.getElementById('ai-thinking').style.display = 'none';
+    document.getElementById('ai-dot').style.background = 'var(--cyan)';
+    // Fallback to static advice
+    var a2 = getAdvice(src||'speech', nz||'crowd');
+    var pn2 = {standard:'Standard',music:'Studio / Music',live:'Live Venue',speech:'Speech / Voice'};
+    var pd2 = a2.p !== profile;
+    var rb2 = document.getElementById('ai-response');
+    rb2.style.display = 'block';
+    rb2.innerHTML =
+      '<div style="font-size:10px;color:#ffb34780;font-family:Space Mono,monospace;margin-bottom:8px;">⚠ OFFLINE — USING BUILT-IN ADVICE</div>'+
+      blk('head-clean','WHAT WILL BE CLEANED', a2.clean)+
+      blk('head-keep', 'WHAT WILL BE KEPT',    a2.keep)+
+      blk('head-rec','RECOMMENDED SETTINGS',
+        'Strength: <span class="setting-chip" onclick="applyChip(\'strength\','+a2.s+',this)">'+a2.s+'%</span> &nbsp;'
+        +'Sensitivity: <span class="setting-chip" onclick="applyChip(\'sensitivity\','+a2.x+',this)">'+a2.x+'×</span>'
+        +(pd2?' &nbsp;Profile: <span class="setting-chip" onclick="applyProfile(\''+a2.p+'\',this)">'+pn2[a2.p]+'</span>':'')
+      )+blk('head-warn','CAUTION', a2.warn);
+    toast('Using offline advice (API unavailable)', 'warn', 3000);
+  }
+
+  btn.disabled = false; btn.textContent = '✦ Analyse & Advise';
+}
+
+function applyMidside(el){
+  if(el.classList.contains('chip-applied')) return;
+  var tog = document.getElementById('midside-toggle');
+  if(tog){ tog.checked = true; tog.dispatchEvent(new Event('change')); }
+  el.classList.add('chip-applied'); el.textContent = 'Wembley M-S ✓';
 }
 function blk(hc, title, body){
   return '<div class="ai-block"><div class="ai-block-head '+hc+'">'+title+'</div>'
@@ -1363,7 +1582,11 @@ function applyProfile(p, el){
    EVENT LISTENERS
 ═══════════════════════════════════════════════════════════ */
 var dz = document.getElementById('drop-zone');
-dz.addEventListener('click', function(){ document.getElementById('file-input').click(); });
+dz.addEventListener('click', function(e){
+  // Prevent waveform / NR-badge clicks from bubbling up and re-opening the file picker
+  if(e.target.closest('#waveform-wrap') || e.target.closest('#nr-badge')) return;
+  document.getElementById('file-input').click();
+});
 dz.addEventListener('dragover', function(e){ e.preventDefault(); dz.classList.add('drag-over'); });
 dz.addEventListener('dragleave', function(){ dz.classList.remove('drag-over'); });
 dz.addEventListener('drop', function(e){
@@ -1414,6 +1637,15 @@ document.getElementById('download-btn').addEventListener('click', function(){
   var a = document.createElement('a'); a.href=url; a.download='clearwave_cleaned.wav'; a.click();
   setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
   toast('Download started', 'success', 2000);
+});
+
+// Mid-Side toggle
+document.getElementById('midside-toggle').addEventListener('change', function(){
+  var on = this.checked;
+  var status = document.getElementById('midside-status');
+  status.textContent = on ? 'ON' : 'OFF';
+  status.className = 'toggle-status' + (on ? ' on' : '');
+  toast(on ? 'Wembley M-S mode ON — crowd crushed, vocal protected' : 'Wembley M-S mode OFF — standard channel processing', 'info', 3000);
 });
 
 // Live Preview Toggle
