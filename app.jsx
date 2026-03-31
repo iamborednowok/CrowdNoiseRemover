@@ -1,4 +1,3 @@
-import React, { useState, useRef } from "react";
 
 // ── FFT ──
 function fft(re, im) {
