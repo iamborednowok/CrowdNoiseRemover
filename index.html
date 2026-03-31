@@ -7,44 +7,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg: #080b12;
-      --surface: #0e1320;
-      --surface2: #141926;
-      --border: #ffffff10;
-      --border2: #ffffff18;
-      --cyan: #3de8ff;
-      --orange: #ff7d45;
-      --green: #4dffb4;
-      --muted: #6b7a99;
-      --text: #c2d0e8;
+      --bg: #080b12; --surface: #0e1320; --surface2: #141926;
+      --border: #ffffff10; --border2: #ffffff18;
+      --cyan: #3de8ff; --orange: #ff7d45; --green: #4dffb4; --muted: #6b7a99; --text: #c2d0e8;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      min-height: 100vh;
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      padding: 24px 16px 40px;
-      max-width: 520px;
-      margin: 0 auto;
-    }
+    body { min-height: 100vh; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; padding: 24px 16px 40px; max-width: 520px; margin: 0 auto; }
 
-    /* Header */
     .header { margin-bottom: 28px; }
     .logo { font-family: 'Space Mono', monospace; font-size: 20px; color: var(--cyan); letter-spacing: 4px; font-weight: 700; }
     .tagline { font-size: 11px; color: var(--muted); margin-top: 3px; letter-spacing: 1px; }
 
-    /* Drop zone */
-    #drop-zone {
-      border: 1px dashed var(--border2);
-      border-radius: 14px;
-      padding: 30px 16px;
-      text-align: center;
-      cursor: pointer;
-      background: var(--surface);
-      margin-bottom: 14px;
-      transition: border-color 0.2s, background 0.2s;
-    }
+    #drop-zone { border: 1px dashed var(--border2); border-radius: 14px; padding: 30px 16px; text-align: center; cursor: pointer; background: var(--surface); margin-bottom: 14px; transition: border-color 0.2s, background 0.2s; }
     #drop-zone:hover { border-color: #3de8ff35; background: #0f1726; }
     .dz-icon { font-size: 30px; margin-bottom: 8px; }
     .dz-hint { font-size: 13px; color: var(--muted); }
@@ -53,19 +27,12 @@
     .fmeta { font-size: 11px; color: var(--muted); margin-top: 4px; }
     .replace { font-size: 11px; color: #ffffff25; margin-top: 6px; }
 
-    /* Error */
     .error { background: #1a0808; border: 1px solid #ff444430; border-radius: 10px; padding: 10px 14px; color: #ff6060; font-size: 12px; margin-bottom: 14px; display: none; }
 
-    /* Cards */
     .card { background: var(--surface); border-radius: 14px; padding: 16px; margin-bottom: 14px; display: none; border: 1px solid var(--border); }
     .card-label { font-family: 'Space Mono', monospace; font-size: 10px; color: #ffffff30; letter-spacing: 1.5px; margin-bottom: 14px; }
 
-    /* Profiles */
-    .profile-item {
-      display: flex; align-items: center; gap: 12px;
-      padding: 10px 12px; border-radius: 10px; margin-bottom: 6px;
-      cursor: pointer; border: 1px solid transparent; transition: all 0.15s;
-    }
+    .profile-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; margin-bottom: 6px; cursor: pointer; border: 1px solid transparent; transition: all 0.15s; }
     .profile-item:last-child { margin-bottom: 0; }
     .profile-item:hover { background: #ffffff06; }
     .profile-item.active { background: #3de8ff0d; border-color: #3de8ff30; }
@@ -74,14 +41,13 @@
     .p-name { font-size: 13px; color: var(--muted); font-weight: 500; }
     .p-desc { font-size: 11px; color: #ffffff20; margin-top: 1px; }
 
-    /* Freq breakdown */
     .freq-map { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); display: none; }
     .freq-map-title { font-size: 10px; color: #ffffff30; letter-spacing: 1px; font-family: 'Space Mono', monospace; margin-bottom: 10px; }
     .freq-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
-    .freq-label { font-size: 10px; color: var(--muted); width: 80px; flex-shrink: 0; }
+    .freq-label { font-size: 10px; color: var(--muted); width: 82px; flex-shrink: 0; }
     .freq-bar-wrap { flex: 1; height: 6px; background: #ffffff08; border-radius: 3px; overflow: hidden; }
     .freq-bar { height: 100%; border-radius: 3px; transition: width 0.4s ease; }
-    .freq-action { font-size: 10px; width: 52px; text-align: right; flex-shrink: 0; }
+    .freq-action { font-size: 10px; width: 54px; text-align: right; flex-shrink: 0; }
     .bar-clean { background: linear-gradient(90deg, #ff5e5e, #ff8c42); }
     .bar-partial { background: linear-gradient(90deg, #ffb347, #ffe066); }
     .bar-protect { background: linear-gradient(90deg, #4dffb4, #3de8ff); }
@@ -89,7 +55,6 @@
     .tag-partial { color: #ffb347; }
     .tag-protect { color: var(--green); }
 
-    /* Sliders */
     .slider-row { margin-bottom: 14px; }
     .slider-row:last-child { margin-bottom: 0; }
     .slider-top { display: flex; justify-content: space-between; margin-bottom: 6px; }
@@ -97,13 +62,7 @@
     .slider-val { font-size: 12px; color: var(--cyan); font-family: 'Space Mono', monospace; font-weight: 700; }
     input[type=range] { width: 100%; accent-color: var(--cyan); cursor: pointer; }
 
-    /* Buttons */
-    .btn {
-      width: 100%; padding: 13px; border-radius: 11px;
-      border: 1px solid var(--border2); background: transparent;
-      color: var(--muted); font-size: 13px; font-family: 'DM Sans', sans-serif;
-      cursor: pointer; margin-bottom: 10px; transition: all 0.15s; font-weight: 500;
-    }
+    .btn { width: 100%; padding: 13px; border-radius: 11px; border: 1px solid var(--border2); background: transparent; color: var(--muted); font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; margin-bottom: 10px; transition: all 0.15s; font-weight: 500; }
     .btn:hover { background: #ffffff06; }
     #process-btn { border-color: #3de8ff40; background: #3de8ff0e; color: var(--cyan); font-size: 14px; font-weight: 600; display: none; }
     #process-btn:disabled { border-color: #ffffff10; background: #141926; color: #ffffff30; cursor: not-allowed; }
@@ -113,7 +72,6 @@
     #play-proc-btn.active { border-color: #ff7d4550; background: #ff7d450d; color: var(--orange); }
     #download-btn { display: none; border-color: #4dffb440; background: #4dffb40d; color: var(--green); }
 
-    /* Progress */
     .progress-wrap { height: 2px; background: #0e1825; border-radius: 2px; margin-bottom: 14px; overflow: hidden; display: none; }
     .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--cyan), #0070ff); transition: width 0.2s; }
 
@@ -124,184 +82,177 @@
     @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
     .ai-title { font-family: 'Space Mono', monospace; font-size: 10px; color: #ffffff30; letter-spacing: 1.5px; }
 
-    .ai-describe-wrap { position: relative; margin-bottom: 12px; }
-    .ai-describe {
-      width: 100%; background: var(--surface2); border: 1px solid var(--border2);
-      border-radius: 10px; padding: 10px 12px; color: var(--text); font-size: 12px;
-      font-family: 'DM Sans', sans-serif; resize: none; outline: none;
-      transition: border-color 0.2s; line-height: 1.5;
-    }
+    .ai-selects { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+    .ai-select { background: var(--surface2); border: 1px solid var(--border2); border-radius: 9px; padding: 9px 10px; color: var(--text); font-size: 12px; font-family: 'DM Sans', sans-serif; outline: none; cursor: pointer; -webkit-appearance: none; width: 100%; }
+    .ai-select:focus { border-color: #3de8ff30; }
+    .ai-select option { background: #141926; }
+
+    .ai-describe { width: 100%; background: var(--surface2); border: 1px solid var(--border2); border-radius: 10px; padding: 10px 12px; color: var(--text); font-size: 12px; font-family: 'DM Sans', sans-serif; resize: none; outline: none; transition: border-color 0.2s; line-height: 1.5; margin-bottom: 10px; }
     .ai-describe:focus { border-color: #3de8ff30; }
     .ai-describe::placeholder { color: #ffffff25; }
 
-    .ai-ask-btn {
-      width: 100%; padding: 10px; border-radius: 9px;
-      border: 1px solid #3de8ff25; background: #3de8ff08;
-      color: var(--cyan); font-size: 12px; font-family: 'DM Sans', sans-serif;
-      cursor: pointer; font-weight: 600; transition: all 0.15s; margin-bottom: 0;
-    }
+    .ai-ask-btn { width: 100%; padding: 10px; border-radius: 9px; border: 1px solid #3de8ff25; background: #3de8ff08; color: var(--cyan); font-size: 12px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 600; transition: all 0.15s; }
     .ai-ask-btn:hover { background: #3de8ff14; }
-    .ai-ask-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    .ai-response {
-      margin-top: 12px; display: none;
-      background: var(--surface2); border-radius: 10px; border: 1px solid var(--border);
-      padding: 14px;
-    }
-    .ai-response-text { font-size: 12px; color: var(--text); line-height: 1.65; }
-    .ai-response-text .section-head {
-      font-family: 'Space Mono', monospace; font-size: 10px;
-      letter-spacing: 1px; margin-top: 12px; margin-bottom: 5px;
-    }
-    .ai-response-text .section-head:first-child { margin-top: 0; }
-    .clean-tag { color: #ff7070; font-weight: 600; }
-    .keep-tag  { color: var(--green); font-weight: 600; }
-    .warn-tag  { color: #ffb347; font-weight: 600; }
-    .ai-thinking { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; padding: 10px 0; }
-    .dots span { display: inline-block; animation: blink 1.2s infinite; }
-    .dots span:nth-child(2) { animation-delay: 0.2s; }
-    .dots span:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes blink { 0%,80%,100%{opacity:0;} 40%{opacity:1;} }
+    .ai-response { margin-top: 12px; display: none; background: var(--surface2); border-radius: 10px; border: 1px solid var(--border); padding: 14px; }
+    .ai-block { margin-bottom: 12px; }
+    .ai-block:last-child { margin-bottom: 0; }
+    .ai-block-head { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 1px; margin-bottom: 5px; }
+    .ai-block-body { font-size: 12px; color: var(--text); line-height: 1.65; }
+    .head-clean { color: #ff7070; }
+    .head-keep  { color: var(--green); }
+    .head-rec   { color: var(--cyan); }
+    .head-warn  { color: #ffb347; }
 
-    /* Footer */
+    .setting-chip { display: inline-block; background: #3de8ff14; border: 1px solid #3de8ff30; color: var(--cyan); border-radius: 6px; padding: 2px 8px; font-size: 11px; font-family: 'Space Mono', monospace; margin: 2px 3px 2px 0; cursor: pointer; }
+    .setting-chip:hover { background: #3de8ff22; }
+    .chip-applied { background: #4dffb414 !important; border-color: #4dffb440 !important; color: var(--green) !important; cursor: default !important; }
+
     .footer { font-size: 11px; color: #ffffff12; text-align: center; margin-top: 20px; }
   </style>
 </head>
 <body>
 
-  <div class="header">
-    <div class="logo">CLEARWAVE</div>
-    <div class="tagline">CROWD NOISE REMOVER · RUNS IN YOUR BROWSER</div>
+<div class="header">
+  <div class="logo">CLEARWAVE</div>
+  <div class="tagline">CROWD NOISE REMOVER · RUNS IN YOUR BROWSER</div>
+</div>
+
+<div id="drop-zone">
+  <input id="file-input" type="file" accept="audio/*" style="display:none"/>
+  <div id="dz-empty">
+    <div class="dz-icon">🎵</div>
+    <div class="dz-hint">Tap to choose audio file</div>
+    <div class="dz-formats">MP3 · WAV · OGG · M4A · FLAC</div>
   </div>
-
-  <div id="drop-zone">
-    <input id="file-input" type="file" accept="audio/*" style="display:none"/>
-    <div id="dz-empty">
-      <div class="dz-icon">🎵</div>
-      <div class="dz-hint">Tap to choose audio file</div>
-      <div class="dz-formats">MP3 · WAV · OGG · M4A · FLAC</div>
-    </div>
-    <div id="dz-loaded" style="display:none">
-      <div class="fname" id="fname"></div>
-      <div class="fmeta" id="fmeta"></div>
-      <div class="replace">Tap to replace</div>
-    </div>
+  <div id="dz-loaded" style="display:none">
+    <div class="fname" id="fname"></div>
+    <div class="fmeta" id="fmeta"></div>
+    <div class="replace">Tap to replace</div>
   </div>
+</div>
 
-  <div class="error" id="error-box"></div>
+<div class="error" id="error-box"></div>
 
-  <!-- Profile picker -->
-  <div class="card" id="card-profile">
-    <div class="card-label">FILTER PROFILE</div>
-    <div class="profile-item active" data-p="standard">
-      <span class="p-emoji">⚙️</span>
-      <div><div class="p-name">Standard</div><div class="p-desc">Balanced subtraction across all frequencies</div></div>
-    </div>
-    <div class="profile-item" data-p="music">
-      <span class="p-emoji">🎵</span>
-      <div><div class="p-name">Studio / Music</div><div class="p-desc">Protects bass & low-mids, targets crowd chatter</div></div>
-    </div>
-    <div class="profile-item" data-p="live">
-      <span class="p-emoji">🎤</span>
-      <div><div class="p-name">Live Venue</div><div class="p-desc">Aggressive mid-range cleaning for concert/event audio</div></div>
-    </div>
-
-    <!-- Frequency breakdown map -->
-    <div class="freq-map" id="freq-map">
-      <div class="freq-map-title">WHAT GETS CLEANED</div>
-      <div id="freq-rows"></div>
-    </div>
+<div class="card" id="card-profile">
+  <div class="card-label">FILTER PROFILE</div>
+  <div class="profile-item active" data-p="standard">
+    <span class="p-emoji">⚙️</span>
+    <div><div class="p-name">Standard</div><div class="p-desc">Balanced subtraction across all frequencies</div></div>
   </div>
-
-  <!-- Controls -->
-  <div class="card" id="card-controls">
-    <div class="card-label">CONTROLS</div>
-    <div class="slider-row">
-      <div class="slider-top">
-        <span class="slider-lbl">Reduction Strength</span>
-        <span class="slider-val" id="strength-val">70%</span>
-      </div>
-      <input type="range" id="strength" min="0.1" max="1.0" step="0.05" value="0.7"/>
-    </div>
-    <div class="slider-row">
-      <div class="slider-top">
-        <span class="slider-lbl">Sensitivity</span>
-        <span class="slider-val" id="sensitivity-val">1.5×</span>
-      </div>
-      <input type="range" id="sensitivity" min="0.5" max="3.0" step="0.1" value="1.5"/>
-    </div>
+  <div class="profile-item" data-p="music">
+    <span class="p-emoji">🎵</span>
+    <div><div class="p-name">Studio / Music</div><div class="p-desc">Protects bass &amp; low-mids, targets crowd chatter</div></div>
   </div>
-
-  <!-- AI Advisor -->
-  <div class="card" id="card-ai">
-    <div class="ai-header">
-      <div class="ai-dot"></div>
-      <div class="ai-title">AI NOISE ADVISOR</div>
-    </div>
-    <textarea class="ai-describe" id="ai-describe" rows="3"
-      placeholder="Describe your audio... e.g. 'live concert recording with loud crowd chanting between songs' or 'speech with background cafeteria noise'"></textarea>
-    <button class="ai-ask-btn" id="ai-ask-btn" onclick="askAI()">✦ Analyse &amp; Advise</button>
-    <div class="ai-response" id="ai-response">
-      <div class="ai-thinking" id="ai-thinking" style="display:none">
-        Analysing<span class="dots"><span>.</span><span>.</span><span>.</span></span>
-      </div>
-      <div class="ai-response-text" id="ai-response-text"></div>
-    </div>
+  <div class="profile-item" data-p="live">
+    <span class="p-emoji">🎤</span>
+    <div><div class="p-name">Live Venue</div><div class="p-desc">Aggressive mid-range cleaning for concert/event audio</div></div>
   </div>
+  <div class="freq-map" id="freq-map">
+    <div class="freq-map-title">WHAT GETS CLEANED</div>
+    <div id="freq-rows"></div>
+  </div>
+</div>
 
-  <button class="btn" id="process-btn" disabled>Remove Crowd Noise</button>
-  <div class="progress-wrap" id="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
-  <button class="btn" id="play-orig-btn">▶ Play Original</button>
-  <button class="btn" id="play-proc-btn">▶ Play Cleaned</button>
-  <button class="btn" id="download-btn">↓ Download WAV</button>
+<div class="card" id="card-controls">
+  <div class="card-label">CONTROLS</div>
+  <div class="slider-row">
+    <div class="slider-top">
+      <span class="slider-lbl">Reduction Strength</span>
+      <span class="slider-val" id="strength-val">70%</span>
+    </div>
+    <input type="range" id="strength" min="0.1" max="1.0" step="0.05" value="0.7"/>
+  </div>
+  <div class="slider-row">
+    <div class="slider-top">
+      <span class="slider-lbl">Sensitivity</span>
+      <span class="slider-val" id="sensitivity-val">1.5×</span>
+    </div>
+    <input type="range" id="sensitivity" min="0.5" max="4.0" step="0.1" value="1.5"/>
+  </div>
+</div>
 
-  <div class="footer">All DSP runs locally — your audio never leaves this page</div>
+<div class="card" id="card-ai">
+  <div class="ai-header">
+    <div class="ai-dot"></div>
+    <div class="ai-title">AI NOISE ADVISOR</div>
+  </div>
+  <div class="ai-selects">
+    <select class="ai-select" id="ai-source">
+      <option value="">Source type…</option>
+      <option value="concert">Live concert</option>
+      <option value="speech">Speech / talk</option>
+      <option value="sports">Sports event</option>
+      <option value="outdoor">Outdoor recording</option>
+      <option value="indoor">Indoor / office</option>
+      <option value="podcast">Podcast / interview</option>
+    </select>
+    <select class="ai-select" id="ai-noise">
+      <option value="">Noise type…</option>
+      <option value="crowd">Crowd chatter</option>
+      <option value="chanting">Crowd chanting</option>
+      <option value="applause">Applause / clapping</option>
+      <option value="ambient">Ambient room hum</option>
+      <option value="traffic">Traffic / outdoor</option>
+      <option value="hvac">AC / HVAC hum</option>
+    </select>
+  </div>
+  <textarea class="ai-describe" id="ai-describe" rows="2"
+    placeholder="Optional: any extra context about your recording…"></textarea>
+  <button class="ai-ask-btn" onclick="runAdvisor()">✦ Analyse &amp; Advise</button>
+  <div class="ai-response" id="ai-response"></div>
+</div>
+
+<button class="btn" id="process-btn" disabled>Remove Crowd Noise</button>
+<div class="progress-wrap" id="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+<button class="btn" id="play-orig-btn">▶ Play Original</button>
+<button class="btn" id="play-proc-btn">▶ Play Cleaned</button>
+<button class="btn" id="download-btn">↓ Download WAV</button>
+
+<div class="footer">All DSP runs locally — your audio never leaves this page</div>
 
 <script>
 var origBuf=null,procBuf=null,audioCtx=null,currentSrc=null,profile='standard',playing=null;
 
-// ── Frequency breakdown per profile ──────────────────────────────────────────
-var FREQ_PROFILES = {
-  standard: [
-    {label:'Sub (0–80 Hz)',   pct:15, type:'partial'},
-    {label:'Bass (80–250)',   pct:30, type:'partial'},
-    {label:'Low-mid (250–1k)',pct:60, type:'clean'},
-    {label:'Mid (1k–4k)',     pct:70, type:'clean'},
-    {label:'Presence (4–8k)', pct:75, type:'clean'},
-    {label:'Air (8k+)',       pct:50, type:'partial'},
+// ── Frequency visualisation map ───────────────────────────────────────────────
+var FREQ_PROFILES={
+  standard:[
+    {label:'Sub (0–80 Hz)',    pct:15,type:'partial'},
+    {label:'Bass (80–250)',    pct:35,type:'partial'},
+    {label:'Low-mid (250–1k)',pct:65,type:'clean'},
+    {label:'Mid (1k–4k)',      pct:75,type:'clean'},
+    {label:'Presence (4–8k)', pct:78,type:'clean'},
+    {label:'Air (8k+)',        pct:55,type:'partial'},
   ],
-  music: [
-    {label:'Sub (0–80 Hz)',   pct:5,  type:'protect'},
-    {label:'Bass (80–250)',   pct:10, type:'protect'},
-    {label:'Low-mid (250–1k)',pct:25, type:'partial'},
-    {label:'Mid (1k–4k)',     pct:65, type:'clean'},
-    {label:'Presence (4–8k)', pct:85, type:'clean'},
-    {label:'Air (8k+)',       pct:80, type:'clean'},
+  music:[
+    {label:'Sub (0–80 Hz)',    pct:5, type:'protect'},
+    {label:'Bass (80–250)',    pct:12,type:'protect'},
+    {label:'Low-mid (250–1k)',pct:28,type:'partial'},
+    {label:'Mid (1k–4k)',      pct:70,type:'clean'},
+    {label:'Presence (4–8k)', pct:88,type:'clean'},
+    {label:'Air (8k+)',        pct:80,type:'clean'},
   ],
-  live: [
-    {label:'Sub (0–120 Hz)',  pct:12, type:'protect'},
-    {label:'Bass (120–400)',  pct:35, type:'partial'},
-    {label:'Low-mid (400–800)',pct:60, type:'clean'},
-    {label:'Mid (800–3.5k)', pct:80, type:'clean'},
-    {label:'Presence (3.5–8k)',pct:88, type:'clean'},
-    {label:'Air (8k+)',       pct:70, type:'partial'},
-  ],
+  live:[
+    {label:'Sub (0–120 Hz)',   pct:10,type:'protect'},
+    {label:'Bass (120–400)',   pct:38,type:'partial'},
+    {label:'Low-mid (400–800)',pct:65,type:'clean'},
+    {label:'Mid (800–3.5k)',   pct:85,type:'clean'},
+    {label:'Presence(3.5–8k)',pct:90,type:'clean'},
+    {label:'Air (8k+)',        pct:72,type:'partial'},
+  ]
 };
 
-function renderFreqMap(p) {
-  var rows = FREQ_PROFILES[p] || FREQ_PROFILES.standard;
-  var el = document.getElementById('freq-rows');
-  el.innerHTML = rows.map(function(r) {
-    var barClass = r.type === 'clean' ? 'bar-clean' : r.type === 'partial' ? 'bar-partial' : 'bar-protect';
-    var actionClass = r.type === 'clean' ? 'tag-clean' : r.type === 'partial' ? 'tag-partial' : 'tag-protect';
-    var actionLabel = r.type === 'clean' ? '✕ Clean' : r.type === 'partial' ? '~ Partial' : '✓ Keep';
-    return '<div class="freq-row">'
-      + '<span class="freq-label">' + r.label + '</span>'
-      + '<div class="freq-bar-wrap"><div class="freq-bar ' + barClass + '" style="width:' + r.pct + '%"></div></div>'
-      + '<span class="freq-action ' + actionClass + '">' + actionLabel + '</span>'
-      + '</div>';
+function renderFreqMap(p){
+  var rows=FREQ_PROFILES[p]||FREQ_PROFILES.standard;
+  document.getElementById('freq-rows').innerHTML=rows.map(function(r){
+    var bc=r.type==='clean'?'bar-clean':r.type==='partial'?'bar-partial':'bar-protect';
+    var ac=r.type==='clean'?'tag-clean':r.type==='partial'?'tag-partial':'tag-protect';
+    var lbl=r.type==='clean'?'✕ Clean':r.type==='partial'?'~ Partial':'✓ Keep';
+    return '<div class="freq-row"><span class="freq-label">'+r.label+'</span>'
+      +'<div class="freq-bar-wrap"><div class="freq-bar '+bc+'" style="width:'+r.pct+'%"></div></div>'
+      +'<span class="freq-action '+ac+'">'+lbl+'</span></div>';
   }).join('');
-  document.getElementById('freq-map').style.display = 'block';
+  document.getElementById('freq-map').style.display='block';
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -310,9 +261,8 @@ function fmt(s){return Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,
 function setProgress(p){document.getElementById('progress-bar').style.width=p+'%';}
 function showError(m){var e=document.getElementById('error-box');e.textContent=m;e.style.display='block';}
 function hideError(){document.getElementById('error-box').style.display='none';}
-
 function stopPlay(){
-  if(currentSrc){try{currentSrc.stop();}catch(e){} currentSrc=null;}
+  if(currentSrc){try{currentSrc.stop();}catch(e){}currentSrc=null;}
   playing=null;
   var o=document.getElementById('play-orig-btn'),p=document.getElementById('play-proc-btn');
   o.classList.remove('active');p.classList.remove('active');
@@ -351,101 +301,130 @@ function hann(N){
   return w;
 }
 
-// ── Core DSP — FIXED noise estimation (10th-percentile, not pure min) ─────────
+// ── CORE DSP — Energy-based noise floor estimation ────────────────────────────
+//
+//  KEY FIX: Old code used pure minimum magnitude per bin.
+//  If any frame was briefly silent → noise floor = ~0 → nothing subtracted.
+//
+//  New approach:
+//  1. Collect RMS energy and magnitude spectrum for every frame.
+//  2. Sort frames by energy; take the bottom 20% (quietest = noise-only frames).
+//  3. Average their magnitude spectra → this IS the noise floor.
+//  4. If all frames have similar energy (constant noise), use ALL frames.
+//
 function processChannel(samples,strength,sensitivity,prof,sampleRate,onProgress){
   return new Promise(function(resolve){
     var N=2048,hop=N>>1,halfN=N>>1;
     var win=hann(N),len=samples.length;
     if(len<N){resolve(samples.slice());return;}
-
     var totalFrames=Math.max(1,Math.floor((len-N)/hop)+1);
     var binHz=function(k){return k*(sampleRate||44100)/N;};
 
-    // Collect per-bin magnitude history (capped at 200 frames to save memory)
-    var HIST_FRAMES = Math.min(totalFrames, 200);
-    var magHistory = [];
-    for(var b=0;b<halfN;b++) magHistory.push([]);
+    // Pass 1: collect per-frame energy + magnitude spectra
+    var frameEnergy=[],frameMags=[];
+    var pos=0,fi=0;
 
-    var fi=0, pos=0;
-
-    // Pass 1: collect magnitude history
-    function pass1(){
-      if(pos+N>len){computeNoise();return;}
+    function collectFrames(){
+      if(pos+N>len){estimateNoise();return;}
       var re=new Float32Array(N),im=new Float32Array(N);
-      for(var i=0;i<N;i++) re[i]=samples[pos+i]*win[i];
+      var rms=0;
+      for(var i=0;i<N;i++){re[i]=samples[pos+i]*win[i];rms+=re[i]*re[i];}
+      rms=Math.sqrt(rms/N);
       fft(re,im);
-      for(var k=0;k<halfN;k++){
-        var m=Math.hypot(re[k],im[k]);
-        if(magHistory[k].length < HIST_FRAMES) magHistory[k].push(m);
-      }
-      pos+=hop; fi++;
-      if(fi%80===0){onProgress(fi/totalFrames*0.35);setTimeout(pass1,0);}else pass1();
+      var m=new Float32Array(halfN);
+      for(var k=0;k<halfN;k++)m[k]=Math.hypot(re[k],im[k]);
+      frameEnergy.push(rms);
+      frameMags.push(m);
+      pos+=hop;fi++;
+      if(fi%80===0){onProgress(fi/totalFrames*0.40);setTimeout(collectFrames,0);}
+      else collectFrames();
     }
 
-    // Derive noise floor: 10th-percentile magnitude per bin (robust against brief silences)
-    var noiseEst = new Float32Array(halfN);
-    function computeNoise(){
-      for(var k=0;k<halfN;k++){
-        var arr = magHistory[k].slice().sort(function(a,b){return a-b;});
-        if(arr.length===0){noiseEst[k]=0;continue;}
-        // Use 10th percentile to avoid brief silences tanking the estimate
-        var idx = Math.max(0, Math.floor(arr.length * 0.10));
-        noiseEst[k] = arr[idx];
+    var noiseEst=new Float32Array(halfN);
+
+    function estimateNoise(){
+      var sorted=frameEnergy.slice().sort(function(a,b){return a-b;});
+      // Bottom 20% by energy, at least 10 frames
+      var cutoff=sorted[Math.max(9,Math.floor(sorted.length*0.20))];
+      var count=0;
+      for(var f=0;f<frameMags.length;f++){
+        if(frameEnergy[f]<=cutoff){
+          for(var k=0;k<halfN;k++)noiseEst[k]+=frameMags[f][k];
+          count++;
+        }
       }
-      magHistory=null; // free memory
-      smoothPass();
+      if(count===0){
+        // Noise fills entire file — use all frames
+        for(var f=0;f<frameMags.length;f++)
+          for(var k=0;k<halfN;k++)noiseEst[k]+=frameMags[f][k];
+        count=frameMags.length;
+      }
+      for(var k=0;k<halfN;k++)noiseEst[k]/=count;
+      frameMags=null; // free memory
+      smoothAndSubtract();
     }
 
-    function smoothPass(){
-      var R = prof==='live' ? 9 : 6;
-      var smoothed = new Float32Array(halfN);
+    function smoothAndSubtract(){
+      var R=prof==='live'?9:6;
+      var smoothed=new Float32Array(halfN);
       for(var k=0;k<halfN;k++){
         var s=0,c=0;
         for(var j=Math.max(0,k-R);j<=Math.min(halfN-1,k+R);j++){s+=noiseEst[j];c++;}
-        smoothed[k] = (prof==='live'?1.4:1.0)*s/c;
+        smoothed[k]=(prof==='live'?1.5:1.1)*s/c;
       }
 
-      var output=new Float32Array(len+N), norm=new Float32Array(len+N);
-      fi=0; pos=0;
+      var output=new Float32Array(len+N),norm=new Float32Array(len+N);
+      var pos2=0,fi2=0;
 
       function pass2(){
-        if(pos+N>len){
+        if(pos2+N>len){
           var result=new Float32Array(len);
-          for(var i=0;i<len;i++) result[i]=norm[i]>1e-9?output[i]/norm[i]:0;
-          resolve(result); return;
+          for(var i=0;i<len;i++)result[i]=norm[i]>1e-9?output[i]/norm[i]:0;
+          resolve(result);return;
         }
         var re=new Float32Array(N),im=new Float32Array(N);
-        for(var i=0;i<N;i++) re[i]=samples[pos+i]*win[i];
+        for(var i=0;i<N;i++)re[i]=samples[pos2+i]*win[i];
         fft(re,im);
+
         for(var k=1;k<halfN;k++){
-          var mag=Math.hypot(re[k],im[k]), phase=Math.atan2(im[k],re[k]), hz=binHz(k);
-          var sc=strength, fl=0.01;
+          var mag=Math.hypot(re[k],im[k]);
+          var phase=Math.atan2(im[k],re[k]);
+          var hz=binHz(k);
+          var sc=strength,fl=0.005;
+
           if(prof==='music'){
-            if(hz<200){sc*=0.15;fl=0.55;}
-            else if(hz<900){sc*=0.35;fl=0.35;}
-            else if(hz<3500){sc*=0.65;fl=0.22;}
-            else if(hz<8000){sc*=1.6;fl=0.08;}
-            else{sc*=1.3;fl=0.06;}
+            if(hz<200){sc*=0.10;fl=0.50;}
+            else if(hz<900){sc*=0.30;fl=0.28;}
+            else if(hz<3500){sc*=0.70;fl=0.07;}
+            else if(hz<8000){sc*=1.8;fl=0.03;}
+            else{sc*=1.5;fl=0.03;}
           } else if(prof==='live'){
-            if(hz<120){sc*=0.3;fl=0.4;}
-            else if(hz<400){sc*=0.6;fl=0.28;}
-            else if(hz<800){sc*=0.8;fl=0.20;}
-            else if(hz<3500){sc*=1.2;fl=0.15;}
-            else if(hz<8000){sc*=1.7;fl=0.07;}
-            else{sc*=1.4;fl=0.05;}
+            if(hz<120){sc*=0.20;fl=0.38;}
+            else if(hz<400){sc*=0.55;fl=0.20;}
+            else if(hz<800){sc*=0.90;fl=0.10;}
+            else if(hz<3500){sc*=1.30;fl=0.05;}
+            else if(hz<8000){sc*=2.0;fl=0.02;}
+            else{sc*=1.6;fl=0.02;}
+          } else {
+            if(hz<80){sc*=0.15;fl=0.28;}
+            else if(hz<250){sc*=0.40;fl=0.12;}
+            else{sc*=1.0;fl=0.005;}
           }
-          var nm = Math.max(mag - sensitivity*smoothed[k]*sc, fl*mag);
-          re[k]=nm*Math.cos(phase); im[k]=nm*Math.sin(phase);
-          re[N-k]=nm*Math.cos(-phase); im[N-k]=nm*Math.sin(-phase);
+
+          var nm=Math.max(mag-sensitivity*smoothed[k]*sc,fl*mag);
+          re[k]=nm*Math.cos(phase);im[k]=nm*Math.sin(phase);
+          re[N-k]=nm*Math.cos(-phase);im[N-k]=nm*Math.sin(-phase);
         }
+
         ifft(re,im);
-        for(var i=0;i<N;i++){output[pos+i]+=re[i]*win[i]; norm[pos+i]+=win[i]*win[i];}
-        pos+=hop; fi++;
-        if(fi%80===0){onProgress(0.35+fi/totalFrames*0.65);setTimeout(pass2,0);}else pass2();
+        for(var i=0;i<N;i++){output[pos2+i]+=re[i]*win[i];norm[pos2+i]+=win[i]*win[i];}
+        pos2+=hop;fi2++;
+        if(fi2%80===0){onProgress(0.40+fi2/totalFrames*0.60);setTimeout(pass2,0);}
+        else pass2();
       }
       pass2();
     }
-    pass1();
+    collectFrames();
   });
 }
 
@@ -460,100 +439,99 @@ function encodeWAV(buf){
   v.setUint16(32,nCh*2,true);v.setUint16(34,16,true);
   ws(36,'data');v.setUint32(40,len*nCh*2,true);
   var off=44;
-  for(var i=0;i<len;i++) for(var c=0;c<nCh;c++){
+  for(var i=0;i<len;i++)for(var c=0;c<nCh;c++){
     var s=Math.max(-1,Math.min(1,buf.getChannelData(c)[i]));
-    v.setInt16(off,s<0?s*32768:s*32767,true); off+=2;
+    v.setInt16(off,s<0?s*32768:s*32767,true);off+=2;
   }
   return ab;
 }
 
-// ── AI Advisor (Anthropic API) ────────────────────────────────────────────────
-async function askAI(){
-  var desc = document.getElementById('ai-describe').value.trim();
-  if(!desc){ desc = 'General audio with crowd noise'; }
-
-  var btn = document.getElementById('ai-ask-btn');
-  btn.disabled = true;
-
-  var respBox = document.getElementById('ai-response');
-  var thinking = document.getElementById('ai-thinking');
-  var respText = document.getElementById('ai-response-text');
-  respBox.style.display = 'block';
-  thinking.style.display = 'flex';
-  respText.innerHTML = '';
-
-  var fileInfo = origBuf
-    ? 'Audio loaded: ' + (origBuf.duration.toFixed(1)) + 's, ' + origBuf.numberOfChannels + ' channel(s), ' + origBuf.sampleRate + ' Hz sample rate.'
-    : 'No audio file loaded yet.';
-
-  var profileNames = { standard: 'Standard', music: 'Studio/Music', live: 'Live Venue' };
-  var profileInfo = 'Selected filter profile: ' + profileNames[profile] + '.';
-
-  var prompt = `You are an expert audio engineer helping a user clean crowd noise from their recording.
-
-Context:
-- ${fileInfo}
-- ${profileInfo}
-- User description: "${desc}"
-
-Respond in this EXACT format with these section headers (use plain text, no markdown bold/italic/bullets):
-
-WHAT WILL BE CLEANED
-[2-3 sentences: what specific frequencies and noise types the algorithm will remove based on their description and chosen profile]
-
-WHAT WILL BE KEPT
-[2-3 sentences: what will be preserved — instruments, vocals, bass, etc.]
-
-RECOMMENDED SETTINGS
-[1-2 sentences: specific Reduction Strength % and Sensitivity multiplier values to use for their scenario, and which profile if different from current]
-
-CAUTION
-[1 sentence: one key thing they should watch out for or check after cleaning]
-
-Be specific, practical, and concise. Use plain text only.`;
-
-  try {
-    var response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-
-    var data = await response.json();
-    var raw = (data.content || []).map(function(b){ return b.text||''; }).join('');
-
-    thinking.style.display = 'none';
-    respText.innerHTML = formatAIResponse(raw);
-  } catch(err) {
-    thinking.style.display = 'none';
-    respText.innerHTML = '<span style="color:#ff6060">Could not reach AI. Check your connection.</span>';
+// ── Rule-based AI Advisor (fully offline — no API key needed) ─────────────────
+var ADVICE={
+  concert:{
+    crowd:{clean:'Crowd chatter and murmur in the 500 Hz–4 kHz range, plus sustained ambient roar between peaks.',keep:'Bass guitar, kick drum sub-lows (80–300 Hz) and lead vocals. The Live profile shields sub-bass so drums stay punchy.',s:90,x:2.5,p:'live',warn:'Reverb tails may get cut short. If the venue sound is part of the vibe, drop Sensitivity to 2.0 after a first pass.'},
+    chanting:{clean:'Repetitive chant fundamentals (200–800 Hz) and harmonics up to 3 kHz, especially in between-song gaps.',keep:'Melodic instruments and lead vocals, which have more dynamic variation than steady chanting.',s:95,x:3.0,p:'live',warn:'If chanting overlaps with music, expect some bleed — chanting and instruments share similar frequency ranges.'},
+    applause:{clean:'Broadband applause noise (600 Hz–10 kHz, similar to high-frequency white noise).',keep:'Low-frequency instrument body and vocals. Applause is mostly high-frequency so bass is unaffected.',s:85,x:2.5,p:'live',warn:'Applause louder than the music signal is hard to remove cleanly. Lower Strength to 75% if you hear metallic echoes.'},
+    def:{clean:'Mid and high-frequency ambient crowd noise (300 Hz–8 kHz).',keep:'Bass frequencies below 200 Hz and transient peaks above the noise floor.',s:85,x:2.2,p:'live',warn:'Listen for a metallic warble — if you hear it, reduce Sensitivity by 0.5.'}
+  },
+  speech:{
+    crowd:{clean:'Background chatter energy in the 250 Hz–3.5 kHz speech band, especially during pauses in the main speaker.',keep:'Primary speaker voice fundamentals (100–300 Hz) and formants (800 Hz–3 kHz).',s:80,x:2.0,p:'standard',warn:'Aggressive reduction can make speech sound hollow. If the voice sounds thin, reduce Strength to 70%.'},
+    ambient:{clean:'Steady-state ambient room hum and HVAC-type broadband noise under the speech signal.',keep:'Speech intelligibility and vocal warmth. Steady noise is the best case for spectral subtraction.',s:75,x:1.8,p:'standard',warn:'Lip smacks and breath sounds may also be reduced — that is usually fine for voice recordings.'},
+    def:{clean:'Background noise in the speech frequency range (250 Hz–4 kHz).',keep:'Vocal clarity and presence.',s:80,x:2.0,p:'standard',warn:'Check the cleaned version carefully in the 1–3 kHz range where speech intelligibility lives.'}
+  },
+  sports:{
+    crowd:{clean:'Stadium crowd roar and chatter in the 200 Hz–5 kHz band between commentary moments.',keep:'Commentary voice, referee whistle, and low-frequency impact sounds (ball kicks, etc.).',s:90,x:2.8,p:'live',warn:'Stadium reverb is part of the crowd — the algorithm will also reduce natural spatial feel.'},
+    chanting:{clean:'Rhythmic chant fundamentals and harmonics across 150 Hz–3.5 kHz.',keep:'Commentary and play-by-play audio which has more dynamic variation.',s:92,x:3.0,p:'live',warn:'Very loud chanting that competes with commentary is the hardest case — try processing twice.'},
+    def:{clean:'Broadband stadium ambient and crowd energy.',keep:'Commentary and game sound effects.',s:88,x:2.5,p:'live',warn:'Very dynamic sports audio may cause pumping — reduce Sensitivity if that happens.'}
+  },
+  outdoor:{
+    traffic:{clean:'Low-frequency traffic rumble (40–200 Hz) and broadband wind/road noise.',keep:'Voice and foreground audio above the traffic spectral floor.',s:85,x:2.0,p:'standard',warn:'Heavy bass reduction can make the recording sound thin — try the Music profile to preserve low-end.'},
+    ambient:{clean:'Steady outdoor ambient hum, wind, and general environmental noise.',keep:'Bird calls, voices, and transient foreground sounds which spike above the ambient floor.',s:75,x:1.8,p:'standard',warn:'Intermittent wind gusts are hard to separate — results are best on sections with steady noise.'},
+    def:{clean:'Outdoor ambient and environmental noise.',keep:'Foreground audio with dynamic peaks above the noise floor.',s:80,x:2.0,p:'standard',warn:'If the noise is highly variable, spectral subtraction works best on the steadier sections.'}
+  },
+  indoor:{
+    hvac:{clean:'HVAC tonal hum (50/60 Hz harmonics) plus broadband air-rush above 2 kHz.',keep:'Speech and music. HVAC noise is very steady so the noise estimate will be highly accurate.',s:70,x:1.6,p:'standard',warn:'If a pitch residue remains, raise Sensitivity to 2.0 to catch its harmonics.'},
+    ambient:{clean:'Room tone, air conditioning hum, and low-level ambient noise across all frequencies.',keep:'Voices and instrument content which sit dynamically above the room noise floor.',s:72,x:1.7,p:'standard',warn:'Very reverberant rooms add energy that can look like noise — some natural room feel may be reduced.'},
+    crowd:{clean:'Indoor crowd murmur in the 300 Hz–3.5 kHz speech range, identifiable during speaker pauses.',keep:'Primary speaker or instrument content which peaks above the crowd floor.',s:82,x:2.2,p:'standard',warn:'Crowded rooms where noise level equals the signal level will not clean well — lower expectations.'},
+    def:{clean:'Indoor ambient and background noise.',keep:'Foreground speech and music.',s:75,x:1.8,p:'standard',warn:'Listen to a short cleaned section before processing the full file.'}
+  },
+  podcast:{
+    ambient:{clean:'Consistent room tone and background hum under the voice signal.',keep:'Voice warmth, breath, and natural room resonance. Podcast audio is the ideal case for this algorithm.',s:70,x:1.6,p:'standard',warn:'Breath and mouth noise will also be partially reduced — that is usually desirable.'},
+    hvac:{clean:'HVAC hum and air conditioner noise, which is very steady and easy to estimate.',keep:'Voice fundamentals and the acoustic character of the recording space.',s:68,x:1.5,p:'standard',warn:'Do not over-process — podcast listeners expect some room sound; aggressive cleaning sounds unnatural.'},
+    crowd:{clean:'Office chatter or background voices below the primary speaker.',keep:'Main speaker voice clarity and intelligibility (250 Hz–4 kHz).',s:80,x:2.0,p:'standard',warn:'If background voices are as loud as the main speaker, separation will be incomplete.'},
+    def:{clean:'Background ambient, room tone, and low-level noise.',keep:'Voice clarity and warmth.',s:70,x:1.6,p:'standard',warn:'Less is more for podcast cleaning — start conservative and re-run if needed.'}
   }
+};
 
-  btn.disabled = false;
+function getAdvice(source,noise){
+  var s=ADVICE[source]||ADVICE.speech;
+  return s[noise]||s['def']||ADVICE.speech['def'];
 }
 
-function formatAIResponse(text){
-  var sections = {
-    'WHAT WILL BE CLEANED': 'clean-tag',
-    'WHAT WILL BE KEPT':    'keep-tag',
-    'RECOMMENDED SETTINGS': 'warn-tag',
-    'CAUTION':              'warn-tag',
-  };
-  var html = text;
-  Object.keys(sections).forEach(function(key){
-    var cls = sections[key];
-    html = html.replace(
-      new RegExp(key, 'g'),
-      '<div class="section-head ' + cls + '">' + key + '</div>'
-    );
-  });
-  // Convert newlines to breaks, clean up extra spacing
-  html = html.replace(/\n{2,}/g,'<br/>').replace(/\n/g,'<br/>');
-  return html;
+function runAdvisor(){
+  var source=document.getElementById('ai-source').value||'speech';
+  var noise=document.getElementById('ai-noise').value||'crowd';
+  var a=getAdvice(source,noise);
+  var profNames={standard:'Standard',music:'Studio / Music',live:'Live Venue'};
+  var profDiff=a.p!==profile;
+  var respBox=document.getElementById('ai-response');
+  respBox.style.display='block';
+  respBox.innerHTML=
+    blk('head-clean','WHAT WILL BE CLEANED',a.clean)+
+    blk('head-keep', 'WHAT WILL BE KEPT',   a.keep)+
+    blk('head-rec',  'RECOMMENDED SETTINGS',
+      'Strength: <span class="setting-chip" onclick="applyChip(\'strength\','+a.s+',this)">'+a.s+'%</span> &nbsp;'
+      +'Sensitivity: <span class="setting-chip" onclick="applyChip(\'sensitivity\','+a.x+',this)">'+a.x+'×</span>'
+      +(profDiff?' &nbsp;Profile: <span class="setting-chip" onclick="applyProfile(\''+a.p+'\',this)">'+profNames[a.p]+'</span>':'')
+    )+
+    blk('head-warn','CAUTION',a.warn);
+}
+
+function blk(hc,title,body){
+  return '<div class="ai-block"><div class="ai-block-head '+hc+'">'+title+'</div>'
+       + '<div class="ai-block-body">'+body+'</div></div>';
+}
+
+function applyChip(type,val,el){
+  if(el.classList.contains('chip-applied'))return;
+  if(type==='strength'){
+    document.getElementById('strength').value=val/100;
+    document.getElementById('strength-val').textContent=val+'%';
+  } else {
+    document.getElementById('sensitivity').value=val;
+    document.getElementById('sensitivity-val').textContent=parseFloat(val).toFixed(1)+'×';
+  }
+  el.classList.add('chip-applied');
+  el.textContent=(type==='strength'?val+'%':val+'×')+' ✓';
+}
+
+function applyProfile(p,el){
+  if(el.classList.contains('chip-applied'))return;
+  document.querySelectorAll('.profile-item').forEach(function(x){x.classList.remove('active');});
+  document.querySelector('[data-p="'+p+'"]').classList.add('active');
+  profile=p;renderFreqMap(p);
+  el.classList.add('chip-applied');
+  el.textContent+=' ✓';
 }
 
 // ── Events ────────────────────────────────────────────────────────────────────
@@ -561,45 +539,41 @@ document.getElementById('drop-zone').addEventListener('click',function(){
   document.getElementById('file-input').click();
 });
 document.getElementById('file-input').addEventListener('change',function(e){
-  if(e.target.files[0]) loadFile(e.target.files[0]);
+  if(e.target.files[0])loadFile(e.target.files[0]);
 });
-
 document.querySelectorAll('.profile-item').forEach(function(el){
   el.addEventListener('click',function(){
     document.querySelectorAll('.profile-item').forEach(function(x){x.classList.remove('active');});
     el.classList.add('active');
-    profile = el.getAttribute('data-p');
+    profile=el.getAttribute('data-p');
     renderFreqMap(profile);
   });
 });
-
 document.getElementById('strength').addEventListener('input',function(){
-  document.getElementById('strength-val').textContent = Math.round(this.value*100)+'%';
+  document.getElementById('strength-val').textContent=Math.round(this.value*100)+'%';
 });
 document.getElementById('sensitivity').addEventListener('input',function(){
-  document.getElementById('sensitivity-val').textContent = parseFloat(this.value).toFixed(1)+'×';
+  document.getElementById('sensitivity-val').textContent=parseFloat(this.value).toFixed(1)+'×';
 });
-
-document.getElementById('process-btn').addEventListener('click', handleProcess);
-
+document.getElementById('process-btn').addEventListener('click',handleProcess);
 document.getElementById('play-orig-btn').addEventListener('click',function(){
   if(playing==='orig'){stopPlay();return;}
-  stopPlay(); playBuf(origBuf,'orig');
-  this.classList.add('active'); this.textContent='■ Stop Original';
+  stopPlay();playBuf(origBuf,'orig');
+  this.classList.add('active');this.textContent='■ Stop Original';
 });
 document.getElementById('play-proc-btn').addEventListener('click',function(){
   if(playing==='proc'){stopPlay();return;}
-  stopPlay(); playBuf(procBuf,'proc');
-  this.classList.add('active'); this.textContent='■ Stop Cleaned';
+  stopPlay();playBuf(procBuf,'proc');
+  this.classList.add('active');this.textContent='■ Stop Cleaned';
 });
 document.getElementById('download-btn').addEventListener('click',function(){
   var url=URL.createObjectURL(new Blob([encodeWAV(procBuf)],{type:'audio/wav'}));
-  var a=document.createElement('a'); a.href=url; a.download='cleaned_audio.wav'; a.click();
+  var a=document.createElement('a');a.href=url;a.download='cleaned_audio.wav';a.click();
   setTimeout(function(){URL.revokeObjectURL(url);},1000);
 });
 
 function loadFile(f){
-  hideError(); procBuf=null; stopPlay();
+  hideError();procBuf=null;stopPlay();
   document.getElementById('play-proc-btn').style.display='none';
   document.getElementById('download-btn').style.display='none';
   var reader=new FileReader();
@@ -623,11 +597,11 @@ function loadFile(f){
 }
 
 function handleProcess(){
-  if(!origBuf) return;
+  if(!origBuf)return;
   var btn=document.getElementById('process-btn');
-  btn.disabled=true; btn.textContent='Processing… 0%';
+  btn.disabled=true;btn.textContent='Processing… 0%';
   document.getElementById('progress-wrap').style.display='block';
-  setProgress(0); stopPlay(); procBuf=null;
+  setProgress(0);stopPlay();procBuf=null;
   document.getElementById('play-proc-btn').style.display='none';
   document.getElementById('download-btn').style.display='none';
   var strength=parseFloat(document.getElementById('strength').value);
@@ -638,21 +612,21 @@ function handleProcess(){
   var ch=0;
   function nextCh(){
     if(ch>=nCh){
-      procBuf=out; setProgress(100);
+      procBuf=out;setProgress(100);
       document.getElementById('play-proc-btn').style.display='block';
       document.getElementById('download-btn').style.display='block';
-      btn.textContent='Remove Crowd Noise'; btn.disabled=false;
+      btn.textContent='Remove Crowd Noise';btn.disabled=false;
       document.getElementById('progress-wrap').style.display='none';
       return;
     }
     processChannel(origBuf.getChannelData(ch),strength,sensitivity,profile,origBuf.sampleRate,function(p){
-      var pct=((ch+p)/nCh)*100; setProgress(pct);
+      var pct=((ch+p)/nCh)*100;setProgress(pct);
       btn.textContent='Processing… '+Math.round(pct)+'%';
     }).then(function(result){
-      out.getChannelData(ch).set(result); ch++; nextCh();
+      out.getChannelData(ch).set(result);ch++;nextCh();
     }).catch(function(e){
       showError('Processing failed: '+e.message);
-      btn.textContent='Remove Crowd Noise'; btn.disabled=false;
+      btn.textContent='Remove Crowd Noise';btn.disabled=false;
       document.getElementById('progress-wrap').style.display='none';
     });
   }
@@ -661,11 +635,11 @@ function handleProcess(){
 
 function playBuf(buf,which){
   var ctx=getCtx();
-  if(ctx.state==='suspended') ctx.resume();
+  if(ctx.state==='suspended')ctx.resume();
   var src=ctx.createBufferSource();
-  src.buffer=buf; src.connect(ctx.destination); src.start();
+  src.buffer=buf;src.connect(ctx.destination);src.start();
   src.onended=function(){stopPlay();};
-  currentSrc=src; playing=which;
+  currentSrc=src;playing=which;
 }
 </script>
 </body>
