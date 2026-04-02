@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <script src="https://unpkg.com/wavesurfer.js@6/dist/wavesurfer.min.js"></script>
 <script src="https://unpkg.com/wavesurfer.js@6/dist/plugin/wavesurfer.regions.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.21.0/dist/tf.min.js" defer></script>
 <style>
 :root{--bg:#060a10;--surface:#0b1018;--surface2:#111823;--border:#ffffff0d;--border2:#ffffff16;--cyan:#3de8ff;--orange:#ff7d45;--green:#4dffb4;--muted:#6b7a99;--text:#c2d0e8;--purple:#b57bff;--pink:#ff5fa0;--yellow:#ffe066;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -232,6 +233,74 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25);}
 @keyframes toastIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
 @keyframes toastOut{to{opacity:0;transform:translateY(12px);}}
 .footer{font-size:10px;color:#ffffff10;text-align:center;margin-top:20px;font-family:'Space Mono',monospace;letter-spacing:1px;}
+
+/* === LOCAL AI ENGINE STYLES === */
+.local-ai-status{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:9px;background:var(--surface2);border:1px solid var(--border);margin-bottom:12px;}
+.local-ai-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.lai-dot-ready{background:#4dffb4;box-shadow:0 0 8px #4dffb460;animation:pulse 2s infinite;}
+.lai-dot-loading{background:#ffe066;box-shadow:0 0 8px #ffe06660;animation:pulse .8s infinite;}
+.lai-dot-offline{background:#ff7d45;box-shadow:0 0 6px #ff7d4540;}
+.local-ai-text{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1.5px;flex:1;}
+.local-ai-badge{font-size:8px;font-family:'Space Mono',monospace;padding:2px 6px;border-radius:4px;letter-spacing:.5px;}
+.lai-badge-free{background:#4dffb40e;color:#4dffb4;border:1px solid #4dffb422;}
+.lai-badge-ai{background:#3de8ff0e;color:var(--cyan);border:1px solid #3de8ff22;}
+.lai-badge-enhanced{background:#b57bff0e;color:var(--purple);border:1px solid #b57bff22;}
+
+/* Wembley / Stadium alert badge */
+.wembley-alert{display:none;margin-top:10px;border-radius:10px;padding:10px 14px;animation:fadeSlide .4s ease;border:1px solid;}
+.wembley-alert.stadium{background:radial-gradient(ellipse at top,#ff7d450a,transparent);border-color:#ff7d4530;}
+.wembley-alert.wembley{background:radial-gradient(ellipse at top,#b57bff0a,transparent);border-color:#b57bff40;}
+.wa-header{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.wa-icon{font-size:16px;}
+.wa-title{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;}
+.wa-body{font-size:11px;color:var(--muted);line-height:1.55;}
+.wa-warn{font-size:10px;font-family:'Space Mono',monospace;letter-spacing:.8px;margin-top:6px;padding-top:6px;border-top:1px solid #ffffff0d;}
+
+/* Quick Presets */
+#card-presets{margin-bottom:14px;border-color:#3de8ff0a;}
+.preset-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.preset-btn{background:var(--surface2);border:1px solid var(--border2);border-radius:9px;padding:9px 8px;color:var(--muted);font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;text-align:left;transition:all .15s;font-weight:500;}
+.preset-btn:hover{background:#ffffff06;color:var(--text);border-color:var(--border2);}
+.preset-btn.wembley-btn{border-color:#b57bff25;color:#b57bff90;}
+.preset-btn.wembley-btn:hover{background:#b57bff0d;border-color:#b57bff40;color:var(--purple);}
+.preset-btn.live-btn{border-color:#ff7d4525;color:#ff7d4590;}
+.preset-btn.live-btn:hover{background:#ff7d450d;border-color:#ff7d4540;color:var(--orange);}
+.preset-btn.speech-btn{border-color:#4dffb425;color:#4dffb490;}
+.preset-btn.speech-btn:hover{background:#4dffb40d;border-color:#4dffb440;color:var(--green);}
+.preset-btn.studio-btn{border-color:#3de8ff25;color:#3de8ff90;}
+.preset-btn.studio-btn:hover{background:#3de8ff0d;border-color:#3de8ff40;color:var(--cyan);}
+.preset-icon{font-size:14px;margin-right:5px;}
+.preset-label{display:block;font-size:9px;color:#ffffff25;font-family:'Space Mono',monospace;letter-spacing:1px;margin-top:2px;}
+
+/* SNR display in analysis badge */
+.snr-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;padding-top:6px;border-top:1px solid var(--border);}
+.snr-chip{font-size:9px;font-family:'Space Mono',monospace;padding:2px 7px;border-radius:4px;border:1px solid var(--border);color:var(--muted);}
+.snr-chip.good{color:#4dffb480;border-color:#4dffb420;}
+.snr-chip.warn{color:#ffe06680;border-color:#ffe06620;}
+.snr-chip.bad{color:#ff7d4580;border-color:#ff7d4520;}
+
+/* Claude enhancement (collapsible) */
+.claude-enhance-toggle{display:flex;align-items:center;justify-content:space-between;padding:8px 0;cursor:pointer;border-top:1px solid var(--border);margin-top:10px;}
+.claude-enhance-label{font-size:10px;font-family:'Space Mono',monospace;color:#b57bff50;letter-spacing:1px;}
+.claude-enhance-arrow{font-size:10px;color:#b57bff50;transition:transform .2s;}
+.claude-enhance-arrow.open{transform:rotate(180deg);}
+.claude-enhance-body{display:none;padding-top:10px;}
+.claude-enhance-body.open{display:block;}
+
+/* AI title row update */
+.ai-mode-tag{font-size:8px;font-family:'Space Mono',monospace;padding:2px 7px;border-radius:5px;background:#4dffb408;border:1px solid #4dffb420;color:#4dffb480;letter-spacing:1px;}
+
+/* Improved header gradient */
+.logo{font-family:'Space Mono',monospace;font-size:22px;letter-spacing:5px;font-weight:700;background:linear-gradient(135deg,var(--cyan),#7ff6ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.logo span{-webkit-text-fill-color:#ffffff15;}
+
+/* Improved scan overlay stages */
+.scan-stage{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-family:'Space Mono',monospace;font-size:8px;letter-spacing:1.5px;color:#3de8ff40;white-space:nowrap;}
+.scan-progress{position:absolute;bottom:0;left:0;height:2px;background:linear-gradient(90deg,#3de8ff,#7ff6ff);transition:width .3s;border-radius:0 2px 0 0;}
+
+/* Clipping warning */
+.clip-warn{background:#120806;border:1px solid #ff5f2028;border-radius:8px;padding:7px 10px;font-size:10px;color:#ff5f2088;font-family:'Space Mono',monospace;letter-spacing:.8px;margin-top:8px;display:none;animation:fadeSlide .3s ease;}
+.clip-warn b{color:#ff7d45;}
 </style>
 </head>
 <body>
@@ -246,7 +315,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25);}
     <span class="perf-chip chip-worker">⚙ WEB WORKER DSP</span>
     <span class="perf-chip chip-stream">⟳ MULTI-PASS</span>
     <span class="perf-chip chip-preview">◈ LIVE PREVIEW</span>
-    <span class="perf-chip chip-ai">✦ AI AUTO-SCAN</span>
+    <span class="perf-chip chip-ai" id="ai-mode-chip">✦ LOCAL AI · OFFLINE</span>
   </div>
   <div class="grid">
     <div>
@@ -266,6 +335,8 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25);}
               <div class="scan-glow"></div><div class="scan-line"></div>
               <div class="scan-label" id="scan-label-text">✦ AI SCANNING…</div>
               <div class="scan-sub" id="scan-sub-text">ANALYSING SPECTRAL PROFILE</div>
+              <div class="scan-stage" id="scan-stage"></div>
+              <div class="scan-progress" id="scan-progress" style="width:0%"></div>
             </div>
             <div class="wf-labels"><span class="wf-label">ORIGINAL</span><span class="wf-label-proc" id="wf-proc-label"></span></div>
             <div style="position:relative;"><div id="waveform-orig"></div><div id="waveform-proc"></div></div>
@@ -284,7 +355,14 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25);}
             <div class="aab-row"><div class="aab-dot"></div><div class="aab-title">AI AUTO-CONFIGURED</div></div>
             <div class="aab-chips" id="aab-chips"></div>
             <div class="aab-insight" id="aab-insight"></div>
+            <div class="snr-row" id="snr-row" style="display:none;"></div>
           </div>
+          <div class="wembley-alert" id="wembley-alert">
+            <div class="wa-header"><span class="wa-icon" id="wa-icon">🏟️</span><span class="wa-title" id="wa-title" style="color:var(--purple);">WEMBLEY MODE ACTIVATED</span></div>
+            <div class="wa-body" id="wa-body"></div>
+            <div class="wa-warn" id="wa-warn" style="display:none;"></div>
+          </div>
+          <div class="clip-warn" id="clip-warn">⚠ <b>DISTORTION DETECTED</b> — strength auto-capped to prevent watery artefacts</div>
           <div id="nr-badge">
             <div class="nr-row"><span class="nr-label">NOISE REMOVED</span><span class="nr-val" id="nr-val">—</span></div>
             <div class="nr-bar-wrap"><div class="nr-bar" id="nr-bar"></div></div>
@@ -306,6 +384,15 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25);}
     </div>
     <div>
       <div class="error" id="error-box"></div>
+      <div class="card" id="card-presets" style="display:none;margin-bottom:14px;">
+        <div class="card-label">QUICK PRESETS</div>
+        <div class="preset-grid">
+          <button class="preset-btn wembley-btn" onclick="applyPreset('wembley')"><span class="preset-icon">🏟️</span>Wembley<span class="preset-label">STADIUM · HARD MODE</span></button>
+          <button class="preset-btn live-btn" onclick="applyPreset('live')"><span class="preset-icon">🎤</span>Live Venue<span class="preset-label">CONCERT · M-S</span></button>
+          <button class="preset-btn speech-btn" onclick="applyPreset('speech')"><span class="preset-icon">🎙️</span>Podcast<span class="preset-label">VOICE PROTECT</span></button>
+          <button class="preset-btn studio-btn" onclick="applyPreset('studio')"><span class="preset-icon">🎚️</span>Studio<span class="preset-label">MUSIC PROTECT</span></button>
+        </div>
+      </div>
       <div class="card span2" id="card-profile">
         <div class="card-label">FILTER PROFILE</div>
         <div class="profile-item active" data-p="standard"><span class="p-emoji">⚙️</span><div><div class="p-name">Standard</div><div class="p-desc">Balanced Wiener filtering across all frequencies</div></div></div>
@@ -360,16 +447,13 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25);}
       <div class="card" id="card-ai" style="margin-top:14px;">
         <div class="ai-header">
           <div class="ai-dot" id="ai-dot"></div>
-          <div class="ai-title">CLAUDE AI NOISE ADVISOR</div>
-          <span style="margin-left:auto;font-size:9px;font-family:'Space Mono',monospace;color:#b57bff80;border:1px solid #b57bff20;border-radius:5px;padding:2px 6px;">claude sonnet</span>
+          <div class="ai-title">LOCAL AI ADVISOR</div>
+          <span class="ai-mode-tag" id="ai-mode-tag">FREE · OFFLINE</span>
         </div>
-        <div class="api-key-wrap">
-          <div class="api-key-label-row"><span class="api-key-label">ANTHROPIC API KEY</span><span class="api-key-badge">OPTIONAL</span></div>
-          <div class="api-key-field-wrap">
-            <input type="password" id="api-key-input" class="api-key-input" placeholder="sk-ant-api… (enables live AI scan)"/>
-            <button class="api-key-toggle" onclick="toggleApiKeyVisible()">👁</button>
-          </div>
-          <div class="api-key-hint">Free key at console.anthropic.com · Stored in memory only · Never leaves this page</div>
+        <div class="local-ai-status" id="lai-status">
+          <div class="local-ai-dot lai-dot-ready" id="lai-dot"></div>
+          <span class="local-ai-text" id="lai-text">HEURISTIC ENGINE READY</span>
+          <span class="local-ai-badge lai-badge-free" id="lai-badge">NO API KEY</span>
         </div>
         <div class="ai-selects">
           <select class="ai-select" id="ai-source"><option value="">Source type…</option><option value="concert">Live concert</option><option value="speech">Speech / talk</option><option value="sports">Sports event</option><option value="outdoor">Outdoor recording</option><option value="indoor">Indoor / office</option><option value="podcast">Podcast / interview</option></select>
@@ -377,10 +461,23 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.25);}
         </div>
         <textarea class="ai-describe" id="ai-describe" rows="2" placeholder="e.g. 'Smooth Criminal Bad Tour Wembley — heavy crowd on left channel'…"></textarea>
         <button class="ai-ask-btn" id="ai-ask-btn" onclick="runAdvisor()">✦ Re-analyse &amp; Advise</button>
-        <div id="ai-thinking" style="display:none;margin-top:10px;padding:10px 12px;background:var(--surface2);border-radius:10px;border:1px solid #b57bff18;">
-          <div style="display:flex;align-items:center;gap:8px;"><div class="ai-dot" style="background:var(--purple);"></div><span style="font-size:11px;color:#b57bff;font-family:'Space Mono',monospace;letter-spacing:1px;" id="ai-thinking-text">ANALYSING…</span></div>
+        <div id="ai-thinking" style="display:none;margin-top:10px;padding:10px 12px;background:var(--surface2);border-radius:10px;border:1px solid #3de8ff18;">
+          <div style="display:flex;align-items:center;gap:8px;"><div class="ai-dot" style="background:var(--cyan);"></div><span style="font-size:11px;color:var(--cyan);font-family:'Space Mono',monospace;letter-spacing:1px;" id="ai-thinking-text">ANALYSING…</span></div>
         </div>
         <div class="ai-response" id="ai-response"></div>
+        <!-- Claude Enhancement (optional) -->
+        <div class="claude-enhance-toggle" onclick="toggleClaudeSection(this)">
+          <span class="claude-enhance-label">✦ CLAUDE ENHANCEMENT (OPTIONAL)</span>
+          <span class="claude-enhance-arrow" id="claude-arrow">▾</span>
+        </div>
+        <div class="claude-enhance-body" id="claude-enhance-body">
+          <div style="font-size:10px;color:#ffffff22;margin-bottom:8px;line-height:1.5;">Add your Anthropic API key to upgrade auto-scan from local heuristics to Claude Sonnet neural analysis. The key is stored in memory only and never leaves this page.</div>
+          <div class="api-key-field-wrap" style="margin-bottom:6px;">
+            <input type="password" id="api-key-input" class="api-key-input" placeholder="sk-ant-api… (enables Claude scan)"/>
+            <button class="api-key-toggle" onclick="toggleApiKeyVisible()">👁</button>
+          </div>
+          <div class="api-key-hint">Free key at console.anthropic.com · Stored in memory only</div>
+        </div>
       </div>
     </div>
     <div class="card span2" id="card-free-ai">
@@ -516,6 +613,142 @@ var dspWorker=null,wsOrig=null,wsProc=null;
 var analyserNode=null,spectrumAnimId=null,spectrumMode=0;
 var previewChain=null,previewEnabled=false;
 var noiseFloorData=null,avgSignalData=null;
+
+/* ===== LOCAL AI ENGINE ===== */
+
+function computeSNRMetrics(buf){
+  var ch=buf.getChannelData(0),N=ch.length;
+  var fSz=Math.floor(buf.sampleRate*0.05),nF=Math.floor(N/fSz);
+  var fE=[];
+  for(var f=0;f<nF;f++){var e=0;for(var i=0;i<fSz;i++){var s=ch[f*fSz+i];e+=s*s;}fE.push(e/fSz);}
+  if(fE.length<4)return{snrDB:20,noiseFloorDB:-60,label:'?'};
+  var sorted=fE.slice().sort(function(a,b){return a-b;});
+  var nIdx=Math.floor(sorted.length*0.15),sIdx=Math.floor(sorted.length*0.75);
+  var nE=sorted.slice(0,nIdx).reduce(function(a,b){return a+b;},0)/Math.max(1,nIdx);
+  var sE=sorted.slice(sIdx).reduce(function(a,b){return a+b;},0)/Math.max(1,sorted.length-sIdx);
+  var snr=nE>1e-14?10*Math.log10(sE/nE):40;
+  var nfDB=nE>0?Math.round(10*Math.log10(nE)*10)/10:-96;
+  var snrDB=Math.round(Math.min(60,Math.max(0,snr))*10)/10;
+  var label=snrDB>25?'CLEAN':snrDB>12?'MODERATE':snrDB>5?'NOISY':'DENSE';
+  return{snrDB:snrDB,noiseFloorDB:nfDB,label:label};
+}
+
+function localAIScan(buf,fileName){
+  var feat=extractFeatures(buf);
+  var snr=computeSNRMetrics(buf);
+  var name=(fileName||'').toLowerCase();
+  var hasClipping=feat.crestFactorDB<8||feat.peakDB>-0.3;
+  var isCompressed=feat.crestFactorDB<12&&feat.spectralFlatness>0.35;
+  var crowdScore=Math.min(1,feat.spectralFlatness*0.5+Math.max(0,(20-feat.crestFactorDB)/20)*0.3+(1-Math.min(1,feat.temporalVariation))*0.2);
+  var isWembleyName=/wembley|bad.tour|mj.live|michael.jackson|smooth.criminal/.test(name);
+  var isStadiumName=/stadium|arena|concert|live|tour|show|venue|gig/.test(name);
+  var isSpeechName=/speech|talk|lecture|podcast|interview|voice/.test(name);
+  var isMusicName=/studio|album|track|song|band|record/.test(name);
+  // Wembley / Stadium wall-of-sound
+  if(isWembleyName||(crowdScore>0.68&&isCompressed&&feat.isStereo)){
+    var str=hasClipping?80:92;
+    return{strength:str,sensitivity:2.8,profile:'live',midside:feat.isStereo,hardMode:!hasClipping,
+      insight:'Stadium wall-of-sound detected (density '+(Math.round(crowdScore*100))+'%, SNR '+snr.snrDB+'dB). '+(hasClipping?'Distortion present — strength capped at 80% to prevent watery artefacts. ':'')+( feat.isStereo?'Crowd energy is wide in the stereo field — M-S mode isolates centre-channel vocals from the roar.':'Aggressive Live Venue filtering applied.'),
+      warn:hasClipping?'High distortion detected. Strength capped at 80%.':null,label:'STADIUM',snr:snr,hasClipping:hasClipping};
+  }
+  // Live concert
+  if(isStadiumName||crowdScore>0.5){
+    return{strength:hasClipping?75:85,sensitivity:2.0,profile:'live',midside:feat.isStereo&&crowdScore>0.58,
+      hardMode:crowdScore>0.62,
+      insight:'Dense live crowd (flatness '+(Math.round(feat.spectralFlatness*100))+'%, SNR '+snr.snrDB+'dB). Live Venue profile targets 400–8kHz crowd roar. '+(crowdScore>0.62?'Hard Mode recommended.':'Standard passes should suffice.'),
+      warn:null,label:'LIVE',snr:snr,hasClipping:hasClipping};
+  }
+  // Speech
+  if(isSpeechName||(feat.temporalVariation<0.30&&feat.spectralFlatness>0.25&&feat.spectralTilt<0.8)){
+    return{strength:72,sensitivity:1.7,profile:'speech',midside:false,hardMode:false,
+      insight:'Speech with background noise (SNR '+snr.snrDB+'dB). Speech profile protects voice fundamentals (80–3kHz) while clearing background chatter.',
+      warn:null,label:'SPEECH',snr:snr,hasClipping:hasClipping};
+  }
+  // Music
+  if(isMusicName||(feat.spectralFlatness<0.2)){
+    return{strength:62,sensitivity:1.4,profile:'music',midside:feat.isStereo,hardMode:false,
+      insight:'Tonal / musical content (flatness '+(Math.round(feat.spectralFlatness*100))+'%). Music profile strongly protects bass and low-mids. Gentle reduction preserves timbre.',
+      warn:null,label:'MUSIC',snr:snr,hasClipping:hasClipping};
+  }
+  // Standard fallback
+  var autoSens=snr.snrDB<10?2.0:snr.snrDB<20?1.6:1.3;
+  var autoStr=Math.min(85,Math.max(55,Math.round(crowdScore*100)));
+  return{strength:autoStr,sensitivity:autoSens,profile:'standard',midside:false,hardMode:false,
+    insight:'Auto-configured from spectral analysis (SNR '+snr.snrDB+'dB, crowd density '+(Math.round(crowdScore*100))+'%). Adjust Sensitivity if artefacts appear.',
+    warn:null,label:'AUTO',snr:snr,hasClipping:hasClipping};
+}
+
+/* QUICK PRESETS */
+function applyPreset(type){
+  var presets={
+    wembley:{strength:0.92,sensitivity:2.8,profile:'live',midside:true,hard:true,msg:'🏟️ Wembley preset — Hard Mode + M-S + Live Venue'},
+    live:{strength:0.82,sensitivity:2.0,profile:'live',midside:true,hard:false,msg:'🎤 Live Venue preset applied'},
+    speech:{strength:0.72,sensitivity:1.7,profile:'speech',midside:false,hard:false,msg:'🎙️ Speech/Podcast preset applied'},
+    studio:{strength:0.60,sensitivity:1.4,profile:'music',midside:false,hard:false,msg:'🎚️ Studio/Music preset applied'}
+  };
+  var p=presets[type];if(!p)return;
+  var si=document.getElementById('strength');si.value=p.strength;document.getElementById('strength-val').textContent=Math.round(p.strength*100)+'%';updateSliderTrack(si);
+  var xi=document.getElementById('sensitivity');xi.value=p.sensitivity;document.getElementById('sensitivity-val').textContent=p.sensitivity.toFixed(1)+'x';updateSliderTrack(xi);
+  document.querySelectorAll('.profile-item').forEach(function(x){x.classList.remove('active');});
+  var pe=document.querySelector('[data-p="'+p.profile+'"]');if(pe){pe.classList.add('active');}profile=p.profile;renderFreqMap(p.profile);
+  var ht=document.getElementById('hardmode-toggle');if(ht){ht.checked=p.hard;ht.dispatchEvent(new Event('change'));}
+  if(p.midside&&origBuf&&origBuf.numberOfChannels>=2){var mst=document.getElementById('midside-toggle');if(mst){mst.checked=true;mst.dispatchEvent(new Event('change'));}}
+  updateArtifactHint();
+  toast(p.msg,'ai',3500);
+}
+
+function toggleClaudeSection(el){
+  var body=document.getElementById('claude-enhance-body');
+  var arrow=document.getElementById('claude-arrow');
+  var isOpen=body.classList.contains('open');
+  body.classList.toggle('open',!isOpen);
+  arrow.classList.toggle('open',!isOpen);
+  if(el)el.querySelector('.claude-enhance-arrow').classList.toggle('open',!isOpen);
+}
+
+function setAIChipMode(mode){
+  var chip=document.getElementById('ai-mode-chip');
+  if(!chip)return;
+  if(mode==='claude')chip.textContent='✦ CLAUDE AI · ENHANCED';
+  else if(mode==='local')chip.textContent='✦ LOCAL AI · OFFLINE';
+  else chip.textContent='✦ AI · SCANNING…';
+}
+
+function showWembleyAlert(result){
+  var el=document.getElementById('wembley-alert');
+  if(!el)return;
+  var lbl=result.label;
+  if(lbl==='STADIUM'){
+    el.className='wembley-alert wembley';
+    document.getElementById('wa-icon').textContent='🏟️';
+    document.getElementById('wa-title').style.color='var(--purple)';
+    document.getElementById('wa-title').textContent='STADIUM MODE ACTIVATED';
+    document.getElementById('wa-body').textContent=result.insight;
+    var warnEl=document.getElementById('wa-warn');
+    if(result.warn){warnEl.textContent='⚠ '+result.warn;warnEl.style.color='#ff7d4580';warnEl.style.display='block';}
+    else{warnEl.style.display='none';}
+    el.style.display='block';
+  }else if(lbl==='LIVE'){
+    el.className='wembley-alert stadium';
+    document.getElementById('wa-icon').textContent='🎤';
+    document.getElementById('wa-title').style.color='var(--orange)';
+    document.getElementById('wa-title').textContent='LIVE VENUE DETECTED';
+    document.getElementById('wa-body').textContent=result.insight;
+    var warnEl2=document.getElementById('wa-warn');warnEl2.style.display='none';
+    el.style.display='block';
+  }else{
+    el.style.display='none';
+  }
+  var clipEl=document.getElementById('clip-warn');
+  if(clipEl)clipEl.style.display=result.hasClipping?'block':'none';
+}
+
+function showSNRChips(snr){
+  var row=document.getElementById('snr-row');if(!row)return;
+  var cls=snr.snrDB>25?'good':snr.snrDB>12?'warn':'bad';
+  row.innerHTML='<span class="snr-chip '+cls+'">SNR '+snr.snrDB+'dB · '+snr.label+'</span><span class="snr-chip">FLOOR '+snr.noiseFloorDB+'dB</span>';
+  row.style.display='flex';
+}
 
 /* HELPERS */
 function getApiKey(){return(document.getElementById('api-key-input').value||'').trim();}
@@ -713,35 +946,51 @@ function extractFeatures(buf){
     isStereo:buf.numberOfChannels>=2};
 }
 
-/* AI AUTO-SCAN */
+/* AI AUTO-SCAN — Local AI engine, Claude as optional enhancement */
 async function autoScanFile(buf,fileName){
   var ov=document.getElementById('scan-overlay'),lEl=document.getElementById('scan-label-text'),sEl=document.getElementById('scan-sub-text');
+  var stageEl=document.getElementById('scan-stage'),progEl=document.getElementById('scan-progress');
   ov.classList.add('active');
-  lEl.textContent='✦ READING AUDIO…';sEl.textContent='EXTRACTING SPECTRAL FINGERPRINT';
-  await new Promise(function(r){setTimeout(r,200);});
+  function setScan(lbl,sub,stage,pct){lEl.textContent=lbl;sEl.textContent=sub;if(stageEl)stageEl.textContent=stage||'';if(progEl)progEl.style.width=(pct||0)+'%';}
+  setScan('✦ READING AUDIO…','EXTRACTING SPECTRAL FINGERPRINT','STAGE 1 / 3',15);
+  await new Promise(function(r){setTimeout(r,250);});
   var feat=extractFeatures(buf);
   showChannelEnergy(buf);
   var estD=Math.min(1,Math.max(0,feat.spectralFlatness*0.4+Math.max(0,1.2-feat.crestFactorDB/18)*0.3+(1-feat.temporalVariation)*0.3));
   showCrowdMeter(estD);
-  lEl.textContent='✦ AI ANALYSING…';sEl.textContent='CONSULTING CLAUDE · CONFIGURING SETTINGS';
-  var sysP=['You are an expert audio engineer in Clearwave, a browser spectral crowd noise remover.',
-    'Controls: profile (standard|music|live|speech), strength 10-100%, sensitivity 0.5-4.0x, midside boolean (stereo only).',
-    'spectralFlatness: >0.5=noise-like/crowd, <0.2=tonal/music. crestFactorDB: low=constant noise.',
-    'Respond ONLY valid JSON no prose no fences:',
-    '{"clean":"one sentence","keep":"one sentence","strength":<10-100>,"sensitivity":<0.5-4.0>,"profile":"standard|music|live|speech","midside":<bool>,"warn":"one sentence","insight":"two sentences"}'
-  ].join('\n');
-  var hdrs={'Content-Type':'application/json','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'};
-  var ak=getApiKey();if(ak)hdrs['x-api-key']=ak;
-  try{
-    var resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:hdrs,body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,system:sysP,messages:[{role:'user',content:'Features: '+JSON.stringify(feat)+'. File: "'+fileName+'". Optimal settings?'}]})});
-    if(!resp.ok)throw new Error('HTTP '+resp.status);
-    var data=await resp.json();
-    var raw=(data.content||[]).map(function(b){return b.type==='text'?b.text:'';}).join('').replace(/```json|```/g,'').trim();
-    applyAiSettings(JSON.parse(raw),feat,'ai');
-  }catch(err){
-    applyAiSettings(autoFallback(feat,fileName),feat,'offline');
-    toast('Settings auto-configured (offline)','warn',3200);
+  setScan('✦ LOCAL AI RUNNING…','ANALYSING DENSITY · SNR · PROFILE','STAGE 2 / 3',45);
+  await new Promise(function(r){setTimeout(r,500);});
+  // Run local AI analysis
+  var result=localAIScan(buf,fileName);
+  // Optional: enhance with Claude if API key provided
+  var ak=getApiKey();
+  if(ak){
+    setScan('✦ CLAUDE ENHANCING…','NEURAL ADVISOR · CONSULTING SONNET','STAGE 3 / 3',75);
+    var sysP=['You are an expert audio engineer in Clearwave, a browser spectral crowd noise remover.',
+      'Controls: profile (standard|music|live|speech), strength 10-100%, sensitivity 0.5-4.0x, midside boolean (stereo only).',
+      'spectralFlatness: >0.5=noise-like/crowd, <0.2=tonal/music. crestFactorDB: low=constant noise.',
+      'Respond ONLY valid JSON no prose no fences:',
+      '{"clean":"one sentence","keep":"one sentence","strength":<10-100>,"sensitivity":<0.5-4.0>,"profile":"standard|music|live|speech","midside":<bool>,"warn":"one sentence","insight":"two sentences"}'
+    ].join('\n');
+    var hdrs={'Content-Type':'application/json','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true','x-api-key':ak};
+    try{
+      var resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:hdrs,body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,system:sysP,messages:[{role:'user',content:'Features: '+JSON.stringify(feat)+'. File: "'+fileName+'". Optimal settings?'}]})});
+      if(!resp.ok)throw new Error('HTTP '+resp.status);
+      var data=await resp.json();
+      var raw=(data.content||[]).map(function(b){return b.type==='text'?b.text:'';}).join('').replace(/```json|```/g,'').trim();
+      var claudeResult=JSON.parse(raw);
+      // Merge — trust Claude for insight, merge settings
+      result=Object.assign(result,claudeResult,{snr:result.snr,hasClipping:result.hasClipping,label:result.label});
+      applyAiSettings(result,feat,'claude');
+    }catch(err){
+      applyAiSettings(result,feat,'local');
+      toast('Claude unavailable — local AI active','warn',2800);
+    }
+  }else{
+    applyAiSettings(result,feat,'local');
   }
+  if(progEl)progEl.style.width='100%';
+  await new Promise(function(r){setTimeout(r,200);});
   ov.classList.remove('active');
 }
 
@@ -753,15 +1002,32 @@ function applyAiSettings(a,feat,mode){
   var xi=document.getElementById('sensitivity');xi.value=xv;document.getElementById('sensitivity-val').textContent=xv.toFixed(1)+'x';updateSliderTrack(xi);
   if(pv!==profile){document.querySelectorAll('.profile-item').forEach(function(x){x.classList.remove('active');});var pe=document.querySelector('[data-p="'+pv+'"]');if(pe)pe.classList.add('active');profile=pv;renderFreqMap(pv);}
   if(a.midside&&feat&&feat.isStereo){var mst=document.getElementById('midside-toggle');if(mst){mst.checked=true;mst.dispatchEvent(new Event('change'));}}
+  if(a.hardMode){var ht=document.getElementById('hardmode-toggle');if(ht&&!ht.checked){ht.checked=true;ht.dispatchEvent(new Event('change'));}}
   updateArtifactHint();updatePreviewGains(sv,xv);
   var pnM={standard:'Standard',music:'Studio/Music',live:'Live Venue',speech:'Speech/Voice'};
   var chips='<span class="aab-chip">'+Math.round(sv*100)+'% str</span><span class="aab-chip">'+xv.toFixed(1)+'x sens</span><span class="aab-chip green">'+pnM[pv]+'</span>';
   if(a.midside&&feat&&feat.isStereo)chips+='<span class="aab-chip" style="color:#b57bff90;border-color:#b57bff22;">Wembley M-S</span>';
-  if(mode==='offline')chips+='<span class="aab-chip offline">offline</span>';
+  if(a.hardMode)chips+='<span class="aab-chip" style="color:#ff7d4590;border-color:#ff7d4522;">Hard Mode</span>';
+  if(mode==='local')chips+='<span class="aab-chip" style="color:#4dffb460;border-color:#4dffb418;">local AI</span>';
+  else if(mode==='offline')chips+='<span class="aab-chip offline">offline</span>';
+  else if(mode==='claude')chips+='<span class="aab-chip" style="color:#b57bff80;border-color:#b57bff22;">claude ✦</span>';
   document.getElementById('aab-chips').innerHTML=chips;
   document.getElementById('aab-insight').textContent=a.insight||'Settings applied from audio analysis.';
   document.getElementById('ai-applied-badge').style.display='block';
-  if(mode==='ai')toast('✦ AI configured · '+Math.round(sv*100)+'% · '+xv.toFixed(1)+'x · '+pnM[pv],'ai',4500);
+  // SNR chips
+  if(a.snr)showSNRChips(a.snr);
+  // Wembley/Stadium alert
+  if(a.label)showWembleyAlert(a);
+  // Update AI chip mode
+  setAIChipMode(mode==='claude'?'claude':'local');
+  // Update local AI status badge
+  var laiText=document.getElementById('lai-text');var laiBadge=document.getElementById('lai-badge');
+  if(laiText&&laiBadge){
+    if(mode==='claude'){laiText.textContent='CLAUDE SONNET ENHANCED';laiBadge.className='local-ai-badge lai-badge-enhanced';laiBadge.textContent='NEURAL AI';}
+    else{laiText.textContent='HEURISTIC ENGINE · COMPLETE';laiBadge.className='local-ai-badge lai-badge-free';laiBadge.textContent='NO API KEY';}
+  }
+  if(mode==='claude')toast('✦ Claude enhanced · '+Math.round(sv*100)+'% · '+xv.toFixed(1)+'x · '+pnM[pv],'ai',4500);
+  else if(mode==='local')toast('✦ Local AI · '+Math.round(sv*100)+'% · '+xv.toFixed(1)+'x · '+(a.label||pnM[pv]),'success',3800);
 }
 
 function autoFallback(f,name){
@@ -783,6 +1049,9 @@ function loadFile(f){
   ['play-proc-btn','download-btn','hear-removed-btn','nr-badge','ai-applied-badge'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});
   document.getElementById('crowd-meter').style.display='none';
   document.getElementById('ch-energy').style.display='none';
+  var wa=document.getElementById('wembley-alert');if(wa)wa.style.display='none';
+  var cw=document.getElementById('clip-warn');if(cw)cw.style.display='none';
+  var sr=document.getElementById('snr-row');if(sr)sr.style.display='none';
   document.getElementById('wf-proc-label').textContent='';
   document.getElementById('preview-row').style.display='none';
   document.getElementById('waveform-proc').classList.remove('visible');
@@ -795,7 +1064,7 @@ function loadFile(f){
       document.getElementById('dz-empty').style.display='none';
       document.getElementById('dz-loaded').style.display='block';
       document.getElementById('waveform-wrap').style.display='block';
-      ['card-profile','card-controls','card-ai','process-btn','play-orig-btn'].forEach(function(id){document.getElementById(id).style.display='block';});
+      ['card-profile','card-controls','card-ai','card-presets','process-btn','play-orig-btn'].forEach(function(id){document.getElementById(id).style.display='block';});
       document.getElementById('process-btn').disabled=false;
       renderFreqMap(profile);
       var isStereo=buf.numberOfChannels>=2;
@@ -965,40 +1234,58 @@ async function runAdvisor(){
   btn.disabled=true;btn.textContent='⟳ Thinking…';
   document.getElementById('ai-thinking').style.display='block';
   document.getElementById('ai-response').style.display='none';
-  document.getElementById('ai-dot').style.background='var(--purple)';
-  var phrases=['ANALYSING…','CHECKING FREQUENCIES…','CALCULATING SNR…','BUILDING ADVICE…'],ti=0;
+  document.getElementById('ai-dot').style.background='var(--cyan)';
+  var phrases=['ANALYSING SPECTRAL DATA…','COMPUTING SNR METRICS…','BUILDING RECOMMENDATION…','CALIBRATING SETTINGS…'],ti=0;
   var ti2=setInterval(function(){ti=(ti+1)%phrases.length;document.getElementById('ai-thinking-text').textContent=phrases[ti];},900);
-  var fCtx='';
-  if(origBuf){var ft=extractFeatures(origBuf);fCtx='File: '+origBuf.duration.toFixed(1)+'s, '+origBuf.sampleRate+'Hz, '+origBuf.numberOfChannels+'ch. crest='+ft.crestFactorDB+'dB, variation='+ft.temporalVariation+', flatness='+ft.spectralFlatness+'. Profile: '+profile+'.';}
-  var sysP='Expert audio engineer in Clearwave (browser Wiener filter crowd remover). Controls: profile, strength 10-100%, sensitivity 0.5-4.0x, midside bool. Respond ONLY valid JSON: {"clean":"","keep":"","strength":<10-100>,"sensitivity":<0.5-4.0>,"profile":"standard|music|live|speech","midside":<bool>,"warn":"","insight":"two sentences"}';
-  var uMsg=(src?'Source: '+src+'. ':'')+(nz?'Noise: '+nz+'. ':'')+(desc?'Desc: '+desc+'. ':'')+fCtx;
-  var hdrs={'Content-Type':'application/json','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'};
-  var ak=getApiKey();if(ak)hdrs['x-api-key']=ak;
-  try{
-    var resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:hdrs,body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,system:sysP,messages:[{role:'user',content:uMsg+'Optimal settings?'}]})});
-    if(!resp.ok)throw new Error('HTTP '+resp.status);
-    var data=await resp.json();
-    var raw=(data.content||[]).map(function(b){return b.type==='text'?b.text:'';}).join('').replace(/```json|```/g,'').trim();
-    var a=JSON.parse(raw);
-    clearInterval(ti2);document.getElementById('ai-thinking').style.display='none';document.getElementById('ai-dot').style.background='var(--cyan)';
-    var pn={standard:'Standard',music:'Studio / Music',live:'Live Venue',speech:'Speech / Voice'};
-    var pd=a.profile&&a.profile!==profile;
-    var showMs=(a.midside===true&&origBuf&&origBuf.numberOfChannels>=2);
-    var msChip=showMs?' &nbsp;<span class="setting-chip" onclick="applyMidside(this)" style="border-color:#b57bff30;color:var(--purple);">Wembley M-S ✦</span>':'';
-    var rb=document.getElementById('ai-response');rb.style.display='block';
-    rb.innerHTML=blk('head-clean','WHAT WILL BE CLEANED',a.clean||'—')+blk('head-keep','WHAT WILL BE KEPT',a.keep||'—')+(a.insight?blk('head-rec','ENGINEERING INSIGHT',a.insight):'')+blk('head-rec','RECOMMENDED SETTINGS','Strength: <span class="setting-chip" onclick="applyChip(\'strength\','+(a.strength||70)+',this)">'+(a.strength||70)+'%</span> &nbsp;Sensitivity: <span class="setting-chip" onclick="applyChip(\'sensitivity\','+(a.sensitivity||1.5)+',this)">'+(a.sensitivity||1.5)+'x</span>'+(pd?' &nbsp;Profile: <span class="setting-chip" onclick="applyProfile(\''+a.profile+'\',this)">'+pn[a.profile]+'</span>':'')+msChip)+blk('head-warn','CAUTION',a.warn||'Listen before committing.');
-    toast('Claude analysis ready','success',2000);
-  }catch(err){
-    clearInterval(ti2);document.getElementById('ai-thinking').style.display='none';document.getElementById('ai-dot').style.background='var(--cyan)';
-    var a2=getAdvice(src||'speech',nz||'crowd');
-    var pn2={standard:'Standard',music:'Studio / Music',live:'Live Venue',speech:'Speech / Voice'};
-    var rb2=document.getElementById('ai-response');rb2.style.display='block';
-    rb2.innerHTML='<div style="font-size:10px;color:#ffb34780;font-family:Space Mono,monospace;margin-bottom:8px;">⚠ OFFLINE'+(ak?' — check API key':' — add API key above')+'</div>'+blk('head-clean','WHAT WILL BE CLEANED',a2.clean)+blk('head-keep','WHAT WILL BE KEPT',a2.keep)+blk('head-rec','RECOMMENDED SETTINGS','Strength: <span class="setting-chip" onclick="applyChip(\'strength\','+a2.s+',this)">'+a2.s+'%</span> &nbsp;Sensitivity: <span class="setting-chip" onclick="applyChip(\'sensitivity\','+a2.x+',this)">'+a2.x+'x</span>'+(a2.p!==profile?' &nbsp;Profile: <span class="setting-chip" onclick="applyProfile(\''+a2.p+'\',this)">'+pn2[a2.p]+'</span>':''))+blk('head-warn','CAUTION',a2.warn);
-    toast('Using offline advice','warn',3000);
+  var feat=origBuf?extractFeatures(origBuf):null;
+  var ak=getApiKey();
+  // Try Claude if API key
+  if(ak){
+    var fCtx='';
+    if(feat){fCtx='File: '+origBuf.duration.toFixed(1)+'s, '+origBuf.sampleRate+'Hz, '+origBuf.numberOfChannels+'ch. crest='+feat.crestFactorDB+'dB, variation='+feat.temporalVariation+', flatness='+feat.spectralFlatness+'. Profile: '+profile+'.';}
+    var sysP='Expert audio engineer in Clearwave (browser Wiener filter crowd remover). Controls: profile, strength 10-100%, sensitivity 0.5-4.0x, midside bool. Respond ONLY valid JSON: {"clean":"","keep":"","strength":<10-100>,"sensitivity":<0.5-4.0>,"profile":"standard|music|live|speech","midside":<bool>,"warn":"","insight":"two sentences"}';
+    var uMsg=(src?'Source: '+src+'. ':'')+(nz?'Noise: '+nz+'. ':'')+(desc?'Desc: '+desc+'. ':'')+fCtx;
+    var hdrs={'Content-Type':'application/json','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true','x-api-key':ak};
+    try{
+      var resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:hdrs,body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,system:sysP,messages:[{role:'user',content:uMsg+'Optimal settings?'}]})});
+      if(!resp.ok)throw new Error('HTTP '+resp.status);
+      var data=await resp.json();
+      var raw=(data.content||[]).map(function(b){return b.type==='text'?b.text:'';}).join('').replace(/```json|```/g,'').trim();
+      var a=JSON.parse(raw);
+      clearInterval(ti2);document.getElementById('ai-thinking').style.display='none';
+      renderAdvisorResponse(a,feat,'claude');
+      toast('Claude analysis ready','success',2000);
+      btn.disabled=false;btn.textContent='✦ Re-analyse & Advise';
+      return;
+    }catch(err){/* fall through to local */}
   }
+  // Local AI fallback (always works)
+  clearInterval(ti2);document.getElementById('ai-thinking').style.display='none';
+  var localResult;
+  if(origBuf){localResult=localAIScan(origBuf,(desc||src||nz));}
+  else{
+    var a2=getAdvice(src||'speech',nz||'crowd');
+    localResult=Object.assign(a2,{strength:a2.s,sensitivity:a2.x,profile:a2.p,insight:a2.warn,warn:a2.warn});
+  }
+  renderAdvisorResponse(localResult,feat,ak?'offline-fallback':'local');
+  toast(ak?'Claude unavailable — local AI active':'✦ Local AI analysis complete','warn',2800);
   btn.disabled=false;btn.textContent='✦ Re-analyse & Advise';
 }
 
+function renderAdvisorResponse(a,feat,mode){
+  var pn={standard:'Standard',music:'Studio / Music',live:'Live Venue',speech:'Speech / Voice'};
+  var pd=a.profile&&a.profile!==profile;
+  var showMs=(a.midside===true&&origBuf&&origBuf.numberOfChannels>=2);
+  var msChip=showMs?' &nbsp;<span class="setting-chip" onclick="applyMidside(this)" style="border-color:#b57bff30;color:var(--purple);">Wembley M-S ✦</span>':'';
+  var rb=document.getElementById('ai-response');rb.style.display='block';
+  var modeLabel=mode==='claude'?'':'<div style="font-size:9px;color:#4dffb450;font-family:Space Mono,monospace;margin-bottom:8px;letter-spacing:.8px;">✦ LOCAL AI · FREE · OFFLINE</div>';
+  rb.innerHTML=modeLabel
+    +blk('head-clean','WHAT WILL BE CLEANED',a.clean||'Crowd noise in the 500Hz–8kHz range.')
+    +blk('head-keep','WHAT WILL BE KEPT',a.keep||'Vocals, bass fundamentals, and transients.')
+    +(a.insight?blk('head-rec','AI INSIGHT',a.insight):'')
+    +blk('head-rec','RECOMMENDED SETTINGS','Strength: <span class="setting-chip" onclick="applyChip(\'strength\','+(a.strength||70)+',this)">'+(a.strength||70)+'%</span> &nbsp;Sensitivity: <span class="setting-chip" onclick="applyChip(\'sensitivity\','+(a.sensitivity||1.5)+',this)">'+(a.sensitivity||1.5)+'x</span>'+(pd?' &nbsp;Profile: <span class="setting-chip" onclick="applyProfile(\''+a.profile+'\',this)">'+pn[a.profile]+'</span>':'')+msChip)
+    +blk('head-warn','CAUTION',a.warn||'Listen before committing to full file processing.');
+}
 function blk(hc,title,body){return'<div class="ai-block"><div class="ai-block-head '+hc+'">'+title+'</div><div class="ai-block-body">'+body+'</div></div>';}
 function applyMidside(el){if(el.classList.contains('chip-applied'))return;var t=document.getElementById('midside-toggle');if(t){t.checked=true;t.dispatchEvent(new Event('change'));}el.classList.add('chip-applied');el.textContent='Wembley M-S ✓';}
 function applyChip(type,val,el){
@@ -1072,7 +1359,19 @@ document.getElementById('preview-toggle').addEventListener('change',function(){
   document.getElementById('preview-status').className='toggle-status'+(previewEnabled?' on':'');
   if(previewEnabled)toast('Live preview ON — play Original to hear filtering','info',3500);
 });
-document.getElementById('api-key-input').addEventListener('input',function(){this.classList.toggle('has-key',this.value.trim().length>10);});
+document.getElementById('api-key-input').addEventListener('input',function(){
+  this.classList.toggle('has-key',this.value.trim().length>10);
+  var laiText=document.getElementById('lai-text');var laiBadge=document.getElementById('lai-badge');
+  if(this.value.trim().length>10){
+    if(laiText)laiText.textContent='CLAUDE ENHANCEMENT READY';
+    if(laiBadge){laiBadge.className='local-ai-badge lai-badge-enhanced';laiBadge.textContent='CLAUDE ✦';}
+    setAIChipMode('claude');
+  }else{
+    if(laiText)laiText.textContent='HEURISTIC ENGINE READY';
+    if(laiBadge){laiBadge.className='local-ai-badge lai-badge-free';laiBadge.textContent='NO API KEY';}
+    setAIChipMode('local');
+  }
+});
 </script>
 </body>
 </html>
